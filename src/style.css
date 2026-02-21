@@ -193,3 +193,28 @@ body[data-mode="break"] {
 .timer-root[data-mode="break"] .btn-secondary:hover {
   background-color: rgba(46, 125, 138, 0.15);
 }
+
+/* --- Timer notification (Stage 2: on-screen message when time is over) ------- */
+.timer-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(1rem);
+  max-width: calc(100% - 2rem);
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.timer-toast.timer-toast-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

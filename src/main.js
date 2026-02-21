@@ -52,8 +52,33 @@ function formatMMSS(seconds) {
  * Switches to the other mode and resets timeRemaining to that mode's duration.
  */
 function switchMode() {
+  const previousMode = currentMode;
   currentMode = currentMode === "work" ? "break" : "work";
   timeRemaining = getDuration(currentMode);
+  // Notify user (non-blocking on-screen message)
+  const message =
+    previousMode === "work"
+      ? "Work session over — time for a break!"
+      : "Break over — back to work!";
+  showTimerNotification(message);
+}
+
+/**
+ * Shows a short on-screen message when the timer ends. Auto-dismisses; no permission needed.
+ * @param {string} message
+ */
+function showTimerNotification(message) {
+  const toast = document.createElement("div");
+  toast.className = "timer-toast";
+  toast.setAttribute("role", "status");
+  toast.setAttribute("aria-live", "polite");
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add("timer-toast-visible"));
+  setTimeout(() => {
+    toast.classList.remove("timer-toast-visible");
+    setTimeout(() => toast.remove(), 400);
+  }, 4000);
 }
 
 // --- Actions (called by UI) ---------------------------------------------------
@@ -89,7 +114,7 @@ function tick() {
   if (!isRunning) return;
   timeRemaining -= 1;
   if (timeRemaining <= 0) {
-    switchMode();
+    switchMode(); // also shows on-screen notification
   }
   updateDisplay();
 }
