@@ -214,8 +214,58 @@ function createUI() {
   breakRow.append(breakLabel, breakDurationSelect);
   settingsEl.append(workRow, breakRow);
 
-  rootEl.append(settingsEl, modeLabelEl, displayEl, controls);
+  // --- Keyboard shortcuts legend ---------------------------------------------
+  const legendEl = document.createElement("section");
+  legendEl.className = "shortcuts-legend";
+  legendEl.setAttribute("aria-label", "Keyboard shortcuts");
+  const legendTitle = document.createElement("div");
+  legendTitle.className = "shortcuts-legend-title";
+  legendTitle.textContent = "Keyboard shortcuts";
+  const legendList = document.createElement("div");
+  legendList.className = "shortcuts-legend-list";
+  const spaceRow = document.createElement("div");
+  spaceRow.className = "shortcuts-legend-row";
+  const spaceKbd = document.createElement("kbd");
+  spaceKbd.textContent = "Space";
+  spaceRow.append(spaceKbd, document.createTextNode(" — Start / Pause"));
+  const rRow = document.createElement("div");
+  rRow.className = "shortcuts-legend-row";
+  const rKbd = document.createElement("kbd");
+  rKbd.textContent = "R";
+  rRow.append(rKbd, document.createTextNode(" — Reset"));
+  legendList.append(spaceRow, rRow);
+  legendEl.append(legendTitle, legendList);
+
+  rootEl.append(settingsEl, modeLabelEl, displayEl, controls, legendEl);
   app.append(rootEl);
+}
+
+/**
+ * Returns true if the active element is a form control we should not trigger shortcuts in.
+ */
+function isFormControlFocused() {
+  const el = document.activeElement;
+  if (!el) return false;
+  const tag = el.tagName && el.tagName.toLowerCase();
+  if (tag === "input" || tag === "select" || tag === "textarea") return true;
+  if (el.getAttribute("contenteditable") === "true") return true;
+  return false;
+}
+
+/**
+ * Handles global keyboard shortcuts: Space = Start/Pause, R = Reset.
+ * Ignored when focus is in a form control.
+ */
+function handleKeyboardShortcuts(e) {
+  if (isFormControlFocused()) return;
+  if (e.key === " ") {
+    e.preventDefault();
+    startPause();
+    return;
+  }
+  if (e.key === "r" || e.key === "R") {
+    reset();
+  }
 }
 
 // --- Init --------------------------------------------------------------------
@@ -223,6 +273,7 @@ function createUI() {
 function init() {
   createUI();
   updateDisplay();
+  document.addEventListener("keydown", handleKeyboardShortcuts);
   setInterval(tick, 1000);
 }
 

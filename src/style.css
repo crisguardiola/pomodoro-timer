@@ -218,3 +218,61 @@ body[data-mode="break"] {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* --- Keyboard shortcuts legend ---------------------------------------------- */
+.shortcuts-legend {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.timer-root[data-mode="work"] .shortcuts-legend {
+  border-top-color: rgba(184, 134, 11, 0.25);
+}
+
+.timer-root[data-mode="break"] .shortcuts-legend {
+  border-top-color: rgba(46, 125, 138, 0.25);
+}
+
+.shortcuts-legend-title {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  opacity: 0.9;
+}
+
+.shortcuts-legend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.shortcuts-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  opacity: 0.85;
+}
+
+.shortcuts-legend kbd {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.8rem;
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1.3;
+  border-radius: 0.3rem;
+  border: 1px solid currentColor;
+  box-shadow: 0 1px 0 currentColor;
+}
+
+.timer-root[data-mode="work"] .shortcuts-legend kbd {
+  border-color: #c9952e;
+  color: #2d1f0f;
+}
+
+.timer-root[data-mode="break"] .shortcuts-legend kbd {
+  border-color: #2e7d8a;
+  color: #0f2d33;
+}
