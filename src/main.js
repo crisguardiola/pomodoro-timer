@@ -26,7 +26,37 @@ let rootEl;
 let workDurationSelect;
 let breakDurationSelect;
 
+/** AudioContext for notification sound (created on first use / user gesture). */
+let audioContext = null;
+
 // --- Helpers -----------------------------------------------------------------
+
+/**
+ * Plays a short notification beep when the timer switches mode.
+ * Uses Web Audio API so no external sound file is needed.
+ */
+function playNotificationSound() {
+  try {
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioContext.state === "suspended") {
+      audioContext.resume();
+    }
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    oscillator.frequency.value = 880;
+    oscillator.type = "sine";
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.2);
+  } catch (_) {
+    // Ignore if audio is blocked (e.g. autoplay policy)
+  }
+}
 
 /**
  * Returns the duration in seconds for the given mode.
@@ -55,6 +85,7 @@ function switchMode() {
   const previousMode = currentMode;
   currentMode = currentMode === "work" ? "break" : "work";
   timeRemaining = getDuration(currentMode);
+  playNotificationSound();
   // Notify user (non-blocking on-screen message)
   const message =
     previousMode === "work"
@@ -85,6 +116,13 @@ function showTimerNotification(message) {
 
 /** Toggles between running and paused. */
 function startPause() {
+  // Create/unlock audio on user gesture so notification can play when timer hits zero
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioContext.state === "suspended") {
+    audioContext.resume();
+  }
   isRunning = !isRunning;
   updateDisplay();
 }
