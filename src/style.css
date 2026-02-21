@@ -56,6 +56,56 @@ body[data-mode="break"] {
   border: 2px solid #6db8d4;
 }
 
+/* --- Settings (Stage 2: custom durations) ------------------------------------ */
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.timer-root[data-mode="work"] .settings {
+  border-bottom-color: rgba(184, 134, 11, 0.25);
+}
+
+.timer-root[data-mode="break"] .settings {
+  border-bottom-color: rgba(46, 125, 138, 0.25);
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.settings-row label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.duration-select {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.95rem;
+  border-radius: 0.4rem;
+  border: 2px solid currentColor;
+  background: transparent;
+  cursor: pointer;
+  min-width: 5.5rem;
+}
+
+.timer-root[data-mode="work"] .duration-select {
+  border-color: #c9952e;
+  color: #2d1f0f;
+}
+
+.timer-root[data-mode="break"] .duration-select {
+  border-color: #2e7d8a;
+  color: #0f2d33;
+}
+
 /* --- Mode label ------------------------------------------------------------- */
 .mode-label {
   font-size: 1rem;

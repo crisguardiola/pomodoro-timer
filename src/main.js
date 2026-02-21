@@ -1,14 +1,18 @@
 // =============================================================================
-// Pomodoro Timer — Stage 1: Core timer with work/break modes (vanilla JS)
+// Pomodoro Timer — Stage 2: Core timer + settings (custom durations)
 // =============================================================================
 
-// --- Constants (durations in seconds) ---------------------------------------
-const WORK_DURATION = 25 * 60;   // 25 minutes
-const BREAK_DURATION = 5 * 60;   // 5 minutes
+// --- Constants ---------------------------------------------------------------
+/** Allowed duration options in seconds (user can pick 5, 10, 15, or 20) */
+const ALLOWED_DURATIONS = [5, 10, 15, 20];
 
 // --- State (single source of truth) ------------------------------------------
+/** Work session duration in seconds (one of ALLOWED_DURATIONS) */
+let workDuration = 10;
+/** Break session duration in seconds (one of ALLOWED_DURATIONS) */
+let breakDuration = 5;
 /** Time left in the current session, in seconds */
-let timeRemaining = WORK_DURATION;
+let timeRemaining = workDuration;
 /** Whether the countdown is currently running */
 let isRunning = false;
 /** Current session type: "work" or "break" */
@@ -19,6 +23,8 @@ let displayEl;
 let modeLabelEl;
 let startPauseBtn;
 let rootEl;
+let workDurationSelect;
+let breakDurationSelect;
 
 // --- Helpers -----------------------------------------------------------------
 
@@ -28,7 +34,7 @@ let rootEl;
  * @returns {number}
  */
 function getDuration(mode) {
-  return mode === "work" ? WORK_DURATION : BREAK_DURATION;
+  return mode === "work" ? workDuration : breakDuration;
 }
 
 /**
@@ -63,6 +69,18 @@ function reset() {
   isRunning = false;
   timeRemaining = getDuration(currentMode);
   updateDisplay();
+}
+
+/** Updates work or break duration from settings; resets current session if not running. */
+function applyDurationSetting(mode, value) {
+  const sec = parseInt(value, 10);
+  if (!ALLOWED_DURATIONS.includes(sec)) return;
+  if (mode === "work") workDuration = sec;
+  else breakDuration = sec;
+  if (!isRunning) {
+    timeRemaining = getDuration(currentMode);
+    updateDisplay();
+  }
 }
 
 // --- Timer tick --------------------------------------------------------------
@@ -125,7 +143,53 @@ function createUI() {
   resetBtn.addEventListener("click", reset);
 
   controls.append(startPauseBtn, resetBtn);
-  rootEl.append(modeLabelEl, displayEl, controls);
+
+  // --- Settings: custom durations (5, 10, 15, 20 sec) ----------------------
+  const settingsEl = document.createElement("div");
+  settingsEl.className = "settings";
+  settingsEl.setAttribute("aria-label", "Timer settings");
+
+  const workLabel = document.createElement("label");
+  workLabel.htmlFor = "work-duration";
+  workLabel.textContent = "Work";
+  workDurationSelect = document.createElement("select");
+  workDurationSelect.id = "work-duration";
+  workDurationSelect.className = "duration-select";
+  workDurationSelect.setAttribute("aria-label", "Work duration");
+  ALLOWED_DURATIONS.forEach((sec) => {
+    const opt = document.createElement("option");
+    opt.value = String(sec);
+    opt.textContent = `${sec} sec`;
+    if (sec === workDuration) opt.selected = true;
+    workDurationSelect.appendChild(opt);
+  });
+  workDurationSelect.addEventListener("change", (e) => applyDurationSetting("work", e.target.value));
+
+  const breakLabel = document.createElement("label");
+  breakLabel.htmlFor = "break-duration";
+  breakLabel.textContent = "Break";
+  breakDurationSelect = document.createElement("select");
+  breakDurationSelect.id = "break-duration";
+  breakDurationSelect.className = "duration-select";
+  breakDurationSelect.setAttribute("aria-label", "Break duration");
+  ALLOWED_DURATIONS.forEach((sec) => {
+    const opt = document.createElement("option");
+    opt.value = String(sec);
+    opt.textContent = `${sec} sec`;
+    if (sec === breakDuration) opt.selected = true;
+    breakDurationSelect.appendChild(opt);
+  });
+  breakDurationSelect.addEventListener("change", (e) => applyDurationSetting("break", e.target.value));
+
+  const workRow = document.createElement("div");
+  workRow.className = "settings-row";
+  workRow.append(workLabel, workDurationSelect);
+  const breakRow = document.createElement("div");
+  breakRow.className = "settings-row";
+  breakRow.append(breakLabel, breakDurationSelect);
+  settingsEl.append(workRow, breakRow);
+
+  rootEl.append(settingsEl, modeLabelEl, displayEl, controls);
   app.append(rootEl);
 }
 
