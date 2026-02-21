@@ -29,3 +29,7 @@ We'll add our own extensions.
 - keyboard shortcuts
 - themes
 - localStorage
+
+
+# #  Stage 4:
+- UI
