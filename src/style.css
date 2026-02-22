@@ -96,9 +96,11 @@ body[data-mode="break"] {
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   font-family: var(--font-family);
   background-color: var(--color-bg-page);
   transition: background-color var(--transition-slow), color var(--transition-normal);
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 #app {
@@ -122,12 +124,35 @@ body {
   justify-content: center;
   align-items: center;
   padding: var(--space-3xl);
+  overflow: visible;
+}
+
+.column-left > * {
+  transform: scale(2.25);
+  transform-origin: center center;
 }
 
 .column-right {
   flex: 1;
   min-width: 0;
-  /* Empty for now; content to be added later */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-3xl);
+  overflow: visible;
+}
+
+.column-right > * {
+  transform: scale(2.25);
+  transform-origin: center center;
+}
+
+/* Braun-inspired circular speaker grille (right column) */
+.braun-speaker {
+  width: min(200px, 90%);
+  height: auto;
+  color: var(--color-accent);
+  opacity: 0.85;
 }
 
 /* --- Timer root (theme is applied via :root / body[data-mode]) --------------- */
@@ -141,8 +166,8 @@ body {
 /* --- Settings corner entry (trigger + dropdown panel) ------------------------ */
 .settings-corner {
   position: fixed;
-  top: var(--space-xl);
-  right: var(--space-xl);
+  top: max(var(--space-xl), env(safe-area-inset-top));
+  right: max(var(--space-xl), env(safe-area-inset-right));
   z-index: 100;
 }
 
@@ -364,7 +389,7 @@ body {
 /* --- Timer notification (Stage 2: on-screen message when time is over) ------- */
 .timer-toast {
   position: fixed;
-  bottom: var(--space-3xl);
+  bottom: max(var(--space-3xl), env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%) translateY(var(--space-xl));
   max-width: calc(100% - var(--space-4xl));
@@ -425,4 +450,109 @@ body {
   border: 1px solid var(--color-accent-strong);
   color: var(--color-text);
   box-shadow: 0 1px 0 currentColor;
+}
+
+/* =============================================================================
+   Responsive layout
+   ============================================================================= */
+
+/* Tablet: stack columns vertically, reduce scale */
+@media (max-width: 900px) {
+  .layout-columns {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .column-left,
+  .column-right {
+    flex: none;
+    min-height: min(50vh, 320px);
+    width: 100%;
+  }
+
+  .column-left > *,
+  .column-right > * {
+    transform: scale(1.5);
+  }
+}
+
+/* Small tablet / large phone: smaller scale */
+@media (max-width: 600px) {
+  .column-left,
+  .column-right {
+    min-height: min(45vh, 280px);
+    padding: var(--space-xl);
+  }
+
+  .column-left > *,
+  .column-right > * {
+    transform: scale(1.25);
+  }
+
+  .timer-root {
+    padding: var(--space-2xl) var(--space-xl);
+  }
+
+  .settings-corner {
+    top: var(--space-md);
+    right: var(--space-md);
+  }
+
+  .timer-toast {
+    bottom: var(--space-xl);
+    max-width: calc(100% - var(--space-2xl));
+    padding: var(--space-md) var(--space-xl);
+  }
+}
+
+/* Phone: no scale, compact layout, smaller clock */
+@media (max-width: 480px) {
+  .column-left,
+  .column-right {
+    min-height: auto;
+    padding: var(--space-lg);
+  }
+
+  .column-left > *,
+  .column-right > * {
+    transform: scale(1);
+  }
+
+  .timer-root {
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .analog-clock-face {
+    width: 140px;
+    height: 140px;
+  }
+
+  .analog-clock-tick {
+    transform-origin: 1px 80px;
+  }
+
+  .analog-clock-tick-major {
+    transform-origin: 1.5px 86px;
+  }
+
+  .analog-clock-hand {
+    transform-origin: 5px 70px;
+  }
+
+  .countdown {
+    font-size: 1.25rem;
+  }
+
+  .controls {
+    gap: var(--space-md);
+  }
+
+  .btn {
+    padding: 0.5rem var(--space-xl);
+    font-size: var(--font-size-md);
+  }
+
+  .braun-speaker {
+    width: min(140px, 70%);
+  }
 }

@@ -355,7 +355,7 @@ function createUI() {
 
   rootEl.append(modeLabelEl, clockWrap, controls);
 
-  // Two-column layout: left = timer (centred), right = reserved for later
+  // Two-column layout: left = timer (centred), right = Braun-style speaker
   const layoutColumns = document.createElement("div");
   layoutColumns.className = "layout-columns";
   const columnLeft = document.createElement("div");
@@ -363,8 +363,52 @@ function createUI() {
   const columnRight = document.createElement("div");
   columnRight.className = "column-right";
   columnLeft.appendChild(rootEl);
+  columnRight.appendChild(createBraunSpeaker());
   layoutColumns.append(columnLeft, columnRight);
   app.append(settingsCorner, layoutColumns);
+}
+
+/**
+ * Creates an SVG element: Braun-inspired circular speaker grille (horizontal
+ * lines forming a circle with a central vertical gap). Purely decorative.
+ * @returns {SVGSVGElement}
+ */
+function createBraunSpeaker() {
+  const size = 200;
+  const r = 90;
+  const gap = 8; // central vertical gap
+  const lineSpacing = 3;
+  const strokeWidth = 1.8;
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("class", "braun-speaker");
+  const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  g.setAttribute("transform", `translate(${size / 2}, ${size / 2})`);
+  const halfGap = gap / 2;
+  for (let y = -r; y <= r; y += lineSpacing) {
+    const x = Math.sqrt(Math.max(0, r * r - y * y));
+    if (x <= halfGap) continue;
+    const left = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    left.setAttribute("x1", -x);
+    left.setAttribute("y1", y);
+    left.setAttribute("x2", -halfGap);
+    left.setAttribute("y2", y);
+    left.setAttribute("stroke", "currentColor");
+    left.setAttribute("stroke-width", strokeWidth);
+    left.setAttribute("stroke-linecap", "round");
+    const right = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    right.setAttribute("x1", halfGap);
+    right.setAttribute("y1", y);
+    right.setAttribute("x2", x);
+    right.setAttribute("y2", y);
+    right.setAttribute("stroke", "currentColor");
+    right.setAttribute("stroke-width", strokeWidth);
+    right.setAttribute("stroke-linecap", "round");
+    g.append(left, right);
+  }
+  svg.appendChild(g);
+  return svg;
 }
 
 /**
