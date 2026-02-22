@@ -184,8 +184,13 @@ body {
   padding: var(--space-xs) 0 var(--space-4xl) 0;
 }
 
-.column-right-inner .braun-speaker {
+.column-right-center {
   grid-row: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  min-width: 0;
 }
 
 /* Hidden <audio> for background music (no layout or visual) */
@@ -208,6 +213,94 @@ body {
   height: auto;
   color: var(--color-accent);
   opacity: 0.85;
+}
+
+/* Vertical radio dial (FM / AM scales + horizontal indicator) */
+.radio-dial {
+  position: relative;
+  width: min(80px, 28vw);
+  height: 200px;
+  background-color: var(--color-bg-timer);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-xs) var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.radio-dial-scales {
+  flex: 1;
+  display: flex;
+  gap: var(--space-sm);
+  min-height: 0;
+}
+
+.radio-dial-scale {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+}
+
+.radio-dial-scale-label {
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-wide);
+  margin-bottom: var(--space-xs);
+}
+
+.radio-dial-scale-body {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  min-height: 120px;
+}
+
+.radio-dial-tick {
+  position: absolute;
+  left: 0;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.6rem;
+  color: var(--color-text);
+  box-sizing: border-box;
+}
+
+.radio-dial-tick::before {
+  content: "";
+  display: block;
+  width: 2px;
+  height: 6px;
+  background: var(--color-border);
+  flex-shrink: 0;
+}
+
+.radio-dial-tick-major::before {
+  height: 10px;
+}
+
+.radio-dial-scale-units {
+  font-size: 0.6rem;
+  color: var(--color-text);
+  opacity: 0.9;
+  margin-top: var(--space-xs);
+}
+
+.radio-dial-indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: var(--palette-accent-strong);
+  transform: translateY(-50%);
+  transition: top var(--transition-normal);
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* Music type buttons: same layout as Start/Reset (label on top, hifi buttons) */
@@ -818,5 +911,14 @@ body {
 
   .braun-speaker {
     width: min(140px, 70%);
+  }
+
+  .radio-dial {
+    width: min(64px, 24vw);
+    height: 160px;
+  }
+
+  .radio-dial-scale-body {
+    min-height: 96px;
   }
 }

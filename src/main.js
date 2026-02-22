@@ -15,6 +15,15 @@ const MUSIC_ASSET_URLS = {
   focus: "/music/focus.mp3",
 };
 
+/** Music type -> vertical position % for radio dial indicator (top = 0, bottom = 100). */
+const RADIO_DIAL_POSITIONS = {
+  classical: 10,
+  jazz: 30,
+  ambient: 50,
+  "lo-fi": 70,
+  focus: 90,
+};
+
 // --- State (single source of truth) ------------------------------------------
 /** Work session duration in seconds (one of ALLOWED_DURATIONS) */
 let workDuration = 10;
@@ -46,6 +55,9 @@ let selectedMusicType = null;
 
 /** <audio> for background music (created in init). */
 let musicAudioEl = null;
+
+/** Radio dial horizontal indicator element (for updating position). */
+let radioDialIndicatorEl = null;
 
 // --- Helpers -----------------------------------------------------------------
 
@@ -405,7 +417,12 @@ function createUI() {
 
   const columnRightInner = document.createElement("div");
   columnRightInner.className = "column-right-inner";
-  columnRightInner.appendChild(createBraunSpeaker());
+
+  const columnRightCenter = document.createElement("div");
+  columnRightCenter.className = "column-right-center";
+  columnRightCenter.appendChild(createBraunSpeaker());
+  columnRightCenter.appendChild(createRadioDial());
+  columnRightInner.appendChild(columnRightCenter);
 
   // Background music: one <audio>, looped; play/stop when user selects a genre
   musicAudioEl = document.createElement("audio");
@@ -458,6 +475,7 @@ function createUI() {
         musicAudioEl.pause();
         musicAudioEl.removeAttribute("src");
       }
+      updateRadioDial();
     });
     wrap.append(lbl, btn);
     musicControls.appendChild(wrap);
@@ -514,6 +532,84 @@ function createBraunSpeaker() {
 }
 
 /**
+ * Creates the vertical FM/AM radio dial (two scale strips + horizontal indicator).
+ * Sets radioDialIndicatorEl. Call updateRadioDial() when selection changes.
+ * @returns {HTMLDivElement}
+ */
+function createRadioDial() {
+  const container = document.createElement("div");
+  container.className = "radio-dial";
+  container.setAttribute("aria-hidden", "true");
+
+  const scalesWrap = document.createElement("div");
+  scalesWrap.className = "radio-dial-scales";
+
+  // FM strip: 88–108 MHz
+  const fmScale = document.createElement("div");
+  fmScale.className = "radio-dial-scale radio-dial-scale-fm";
+  const fmLabel = document.createElement("div");
+  fmLabel.className = "radio-dial-scale-label";
+  fmLabel.textContent = "FM";
+  const fmBody = document.createElement("div");
+  fmBody.className = "radio-dial-scale-body";
+  const fmMin = 88;
+  const fmMax = 108;
+  for (let v = fmMin; v <= fmMax; v += 2) {
+    const tick = document.createElement("div");
+    tick.className = "radio-dial-tick radio-dial-tick-major";
+    tick.style.top = `${((v - fmMin) / (fmMax - fmMin)) * 100}%`;
+    tick.textContent = v;
+    fmBody.appendChild(tick);
+  }
+  const fmUnits = document.createElement("div");
+  fmUnits.className = "radio-dial-scale-units";
+  fmUnits.textContent = "MHz";
+  fmScale.append(fmLabel, fmBody, fmUnits);
+
+  // AM strip: 550–1600 kHz
+  const amScale = document.createElement("div");
+  amScale.className = "radio-dial-scale radio-dial-scale-am";
+  const amLabel = document.createElement("div");
+  amLabel.className = "radio-dial-scale-label";
+  amLabel.textContent = "AM";
+  const amBody = document.createElement("div");
+  amBody.className = "radio-dial-scale-body";
+  const amValues = [550, 600, 700, 800, 900, 1000, 1200, 1400, 1600];
+  for (let i = 0; i < amValues.length; i++) {
+    const v = amValues[i];
+    const tick = document.createElement("div");
+    tick.className = "radio-dial-tick radio-dial-tick-major";
+    tick.style.top = `${(i / (amValues.length - 1)) * 100}%`;
+    tick.textContent = v;
+    amBody.appendChild(tick);
+  }
+  const amUnits = document.createElement("div");
+  amUnits.className = "radio-dial-scale-units";
+  amUnits.textContent = "kHz";
+  amScale.append(amLabel, amBody, amUnits);
+
+  scalesWrap.append(fmScale, amScale);
+  container.appendChild(scalesWrap);
+
+  const indicator = document.createElement("div");
+  indicator.className = "radio-dial-indicator";
+  indicator.style.top = "98%";
+  container.appendChild(indicator);
+
+  radioDialIndicatorEl = indicator;
+  return container;
+}
+
+/**
+ * Updates the radio dial horizontal indicator position from selectedMusicType.
+ */
+function updateRadioDial() {
+  if (!radioDialIndicatorEl) return;
+  const pct = selectedMusicType ? RADIO_DIAL_POSITIONS[selectedMusicType] : 98;
+  radioDialIndicatorEl.style.top = `${pct}%`;
+}
+
+/**
  * Returns true if the active element is a form control we should not trigger shortcuts in.
  */
 function isFormControlFocused() {
@@ -546,6 +642,7 @@ function handleKeyboardShortcuts(e) {
 function init() {
   createUI();
   updateDisplay();
+  updateRadioDial();
   document.addEventListener("keydown", handleKeyboardShortcuts);
   setInterval(tick, 1000);
 }
