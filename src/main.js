@@ -25,6 +25,8 @@ let startPauseBtn;
 let rootEl;
 let workDurationSelect;
 let breakDurationSelect;
+let clockHandEl;
+let clockFaceEl;
 
 /** AudioContext for notification sound (created on first use / user gesture). */
 let audioContext = null;
@@ -160,15 +162,35 @@ function tick() {
 // --- Display -----------------------------------------------------------------
 
 /**
- * Updates the DOM: countdown text, Start/Pause label, mode label, and theme.
+ * Updates the DOM: countdown text, analog clock hand & ticks, Start/Pause label, mode label, and theme.
  */
 function updateDisplay() {
   if (!displayEl || !modeLabelEl || !startPauseBtn || !rootEl) return;
+  const totalDuration = getDuration(currentMode);
   displayEl.textContent = formatMMSS(timeRemaining);
   modeLabelEl.textContent = currentMode === "work" ? "Work" : "Break";
   startPauseBtn.textContent = isRunning ? "Pause" : "Start";
   rootEl.setAttribute("data-mode", currentMode);
   document.body.setAttribute("data-mode", currentMode);
+
+  // Analog clock: hand at 12 o'clock when full, sweeps clockwise as time counts down
+  if (clockHandEl && totalDuration > 0) {
+    const angle = (1 - timeRemaining / totalDuration) * 360;
+    clockHandEl.style.transform = `rotate(${angle}deg)`;
+  }
+  // Second ticks: one per second of current session, positioned around the circle
+  if (clockFaceEl) {
+    const ticks = clockFaceEl.querySelectorAll(".analog-clock-tick");
+    ticks.forEach((tick, i) => {
+      if (i < totalDuration) {
+        tick.style.display = "";
+        const tickAngle = (i / totalDuration) * 360;
+        tick.style.transform = `rotate(${tickAngle}deg)`;
+      } else {
+        tick.style.display = "none";
+      }
+    });
+  }
 }
 
 /**
@@ -185,6 +207,24 @@ function createUI() {
   modeLabelEl = document.createElement("div");
   modeLabelEl.className = "mode-label";
   modeLabelEl.setAttribute("aria-live", "polite");
+
+  // --- Analog clock: face, second ticks, hand ---------------------------------
+  const clockWrap = document.createElement("div");
+  clockWrap.className = "analog-clock-wrap";
+  clockWrap.setAttribute("aria-hidden", "true");
+
+  clockFaceEl = document.createElement("div");
+  clockFaceEl.className = "analog-clock-face";
+  for (let i = 0; i < 20; i++) {
+    const tick = document.createElement("div");
+    tick.className = "analog-clock-tick";
+    tick.setAttribute("data-tick-index", String(i));
+    clockFaceEl.appendChild(tick);
+  }
+  clockHandEl = document.createElement("div");
+  clockHandEl.className = "analog-clock-hand";
+  clockFaceEl.appendChild(clockHandEl);
+  clockWrap.appendChild(clockFaceEl);
 
   displayEl = document.createElement("div");
   displayEl.className = "countdown";
@@ -274,7 +314,7 @@ function createUI() {
   legendList.append(spaceRow, rRow);
   legendEl.append(legendTitle, legendList);
 
-  rootEl.append(settingsEl, modeLabelEl, displayEl, controls, legendEl);
+  rootEl.append(settingsEl, modeLabelEl, clockWrap, displayEl, controls, legendEl);
   app.append(rootEl);
 }
 
