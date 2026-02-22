@@ -51,7 +51,7 @@
   --shadow-toast: 0 4px 20px var(--palette-shadow);
 
   /* Typography */
-  --font-family: system-ui, -apple-system, sans-serif;
+  --font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-size-xs: 0.8rem;
   --font-size-sm: 0.85rem;
   --font-size-base: 0.9rem;
@@ -208,6 +208,109 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-end;
+}
+
+.music-controls .control-btn-label {
+  font-size: 0.6rem;
+  font-weight: 400;
+}
+
+/* Music buttons: enhanced 3D (shadows + gradients), toggleable pressed glow */
+.music-controls .btn-hifi {
+  box-shadow:
+    0 4px 0 rgba(0, 0, 0, 0.35),
+    0 6px 12px rgba(0, 0, 0, 0.25),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.25);
+  transition: transform var(--transition-fast), box-shadow var(--transition-normal);
+}
+
+.music-controls .btn-hifi:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 5px 0 rgba(0, 0, 0, 0.3),
+    0 8px 16px rgba(0, 0, 0, 0.28),
+    inset 0 2px 4px rgba(255, 255, 255, 0.45),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.music-controls .btn-hifi:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.4),
+    0 3px 8px rgba(0, 0, 0, 0.25),
+    inset 0 2px 6px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.1);
+}
+
+.music-controls .btn-hifi.is-pressed {
+  transform: translateY(2px);
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.4),
+    0 3px 8px rgba(0, 0, 0, 0.25),
+    0 0 12px var(--palette-accent-strong),
+    0 0 24px color-mix(in srgb, var(--palette-accent-strong) 60%, transparent),
+    inset 0 2px 6px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.1);
+}
+
+.music-controls .btn-hifi.is-pressed:hover {
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.4),
+    0 3px 8px rgba(0, 0, 0, 0.25),
+    0 0 14px var(--palette-accent-strong),
+    0 0 28px color-mix(in srgb, var(--palette-accent-strong) 50%, transparent),
+    inset 0 2px 6px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.1);
+}
+
+/* Start/Reset buttons: same 3D and toggleable pressed glow */
+.timer-root .controls .btn-hifi {
+  box-shadow:
+    0 4px 0 rgba(0, 0, 0, 0.35),
+    0 6px 12px rgba(0, 0, 0, 0.25),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.25);
+  transition: transform var(--transition-fast), box-shadow var(--transition-normal);
+}
+
+.timer-root .controls .btn-hifi:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 5px 0 rgba(0, 0, 0, 0.3),
+    0 8px 16px rgba(0, 0, 0, 0.28),
+    inset 0 2px 4px rgba(255, 255, 255, 0.45),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.timer-root .controls .btn-hifi:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.4),
+    0 3px 8px rgba(0, 0, 0, 0.25),
+    inset 0 2px 6px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.1);
+}
+
+.timer-root .controls .btn-hifi.is-pressed {
+  transform: translateY(2px);
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.4),
+    0 3px 8px rgba(0, 0, 0, 0.25),
+    0 0 12px var(--palette-accent-strong),
+    0 0 24px color-mix(in srgb, var(--palette-accent-strong) 60%, transparent),
+    inset 0 2px 6px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.1);
+}
+
+.timer-root .controls .btn-hifi.is-pressed:hover {
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.4),
+    0 3px 8px rgba(0, 0, 0, 0.25),
+    0 0 14px var(--palette-accent-strong),
+    0 0 28px color-mix(in srgb, var(--palette-accent-strong) 50%, transparent),
+    inset 0 2px 6px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.1);
 }
 
 /* --- Timer root (theme is applied via :root / body[data-mode]) --------------- */

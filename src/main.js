@@ -243,6 +243,7 @@ function createUI() {
   startPauseBtn.type = "button";
   startPauseBtn.className = "btn btn-hifi btn-hifi-primary";
   startPauseBtn.setAttribute("aria-label", "Start");
+  startPauseBtn.setAttribute("aria-pressed", "false");
   startPauseLabelEl = document.createElement("span");
   startPauseLabelEl.className = "control-btn-label";
   startPauseLabelEl.textContent = "Start";
@@ -254,13 +255,22 @@ function createUI() {
   resetBtn.type = "button";
   resetBtn.className = "btn btn-hifi btn-hifi-secondary";
   resetBtn.setAttribute("aria-label", "Reset");
+  resetBtn.setAttribute("aria-pressed", "false");
   const resetLabel = document.createElement("span");
   resetLabel.className = "control-btn-label";
   resetLabel.textContent = "Reset";
   resetWrap.append(resetLabel, resetBtn);
 
-  startPauseBtn.addEventListener("click", startPause);
-  resetBtn.addEventListener("click", reset);
+  startPauseBtn.addEventListener("click", () => {
+    startPause();
+    const pressed = startPauseBtn.classList.toggle("is-pressed");
+    startPauseBtn.setAttribute("aria-pressed", String(pressed));
+  });
+  resetBtn.addEventListener("click", () => {
+    reset();
+    const pressed = resetBtn.classList.toggle("is-pressed");
+    resetBtn.setAttribute("aria-pressed", String(pressed));
+  });
 
   controls.append(startWrap, resetWrap);
 
@@ -382,7 +392,7 @@ function createUI() {
   columnRightInner.className = "column-right-inner";
   columnRightInner.appendChild(createBraunSpeaker());
 
-  const musicTypes = ["Classical", "Jazz", "Ambient", "Lo-Fi", "Focus"];
+  const musicTypes = ["classical", "jazz", "ambient", "lo-fi", "focus"];
   const musicControls = document.createElement("div");
   musicControls.className = "music-controls";
   musicTypes.forEach((label) => {
@@ -395,6 +405,11 @@ function createUI() {
     btn.type = "button";
     btn.className = "btn btn-hifi btn-hifi-secondary";
     btn.setAttribute("aria-label", `Music: ${label}`);
+    btn.setAttribute("aria-pressed", "false");
+    btn.addEventListener("click", () => {
+      const pressed = btn.classList.toggle("is-pressed");
+      btn.setAttribute("aria-pressed", String(pressed));
+    });
     wrap.append(lbl, btn);
     musicControls.appendChild(wrap);
   });
