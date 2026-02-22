@@ -5,14 +5,23 @@
 /* --- Design tokens (custom properties) -------------------------------------- */
 :root {
   /* Base palette — work theme (warm). Change these to retheme the app. */
-  --palette-page-bg: #faf5ed;
-  --palette-surface: #fef3e2;
-  --palette-text: #2d1f0f;
-  --palette-border: #e8b86d;
-  --palette-accent: #b8860b;
-  --palette-accent-strong: #c9952e;
-  --palette-accent-hover: #a67c1f;
-  --palette-divider: rgba(184, 134, 11, 0.25);
+  --palette-page-bg: #F3F3F3;
+  --palette-surface: #a3a3a3;
+  --palette-text: #090101;
+  --palette-border: #747474;
+  --palette-accent: #090101;
+  --palette-accent-strong: #FF3D00;
+  --palette-accent-hover: #96A191;
+  --palette-divider: rgba(11, 17, 184, 0.25);
+
+  /* Start/Reset (hi-fi) button gradient — work theme */
+  --palette-btn-hifi-light: #788174;
+  --palette-btn-hifi-mid: #788174;
+  --palette-btn-hifi-dark: #788174;
+  --palette-btn-hifi-light-hover: #788174;
+  --palette-btn-hifi-mid-hover: #788174;
+  --palette-btn-hifi-dark-hover: #788174;
+  --palette-btn-hifi-text: #2d2416;
 
   /* Base palette — neutral (shared across themes) */
   --palette-neutral-text: #1a1a1a;
@@ -29,6 +38,13 @@
   --color-accent-strong: var(--palette-accent-strong);
   --color-accent-hover: var(--palette-accent-hover);
   --color-divider: var(--palette-divider);
+  --color-btn-hifi-light: var(--palette-btn-hifi-light);
+  --color-btn-hifi-mid: var(--palette-btn-hifi-mid);
+  --color-btn-hifi-dark: var(--palette-btn-hifi-dark);
+  --color-btn-hifi-light-hover: var(--palette-btn-hifi-light-hover);
+  --color-btn-hifi-mid-hover: var(--palette-btn-hifi-mid-hover);
+  --color-btn-hifi-dark-hover: var(--palette-btn-hifi-dark-hover);
+  --color-btn-hifi-text: var(--palette-btn-hifi-text);
   --color-neutral-text: var(--palette-neutral-text);
   --color-neutral-bg: var(--palette-neutral-bg);
   --color-divider-neutral: var(--palette-divider-neutral);
@@ -479,11 +495,11 @@ body {
 .btn-hifi-secondary {
   background: radial-gradient(
     circle at 35% 35%,
-    #c9a86a,
-    #a68b52 45%,
-    #8b7344 100%
+    var(--color-btn-hifi-light),
+    var(--color-btn-hifi-mid) 45%,
+    var(--color-btn-hifi-dark) 100%
   );
-  color: #2d2416;
+  color: var(--color-btn-hifi-text);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
@@ -491,9 +507,9 @@ body {
 .btn-hifi-secondary:hover {
   background: radial-gradient(
     circle at 35% 35%,
-    #d4b378,
-    #b0985e 45%,
-    #967a4a 100%
+    var(--color-btn-hifi-light-hover),
+    var(--color-btn-hifi-mid-hover) 45%,
+    var(--color-btn-hifi-dark-hover) 100%
   );
 }
 
