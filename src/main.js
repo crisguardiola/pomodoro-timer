@@ -22,6 +22,7 @@ let currentMode = "work";
 let displayEl;
 let modeLabelEl;
 let startPauseBtn;
+let startPauseLabelEl;
 let rootEl;
 let workDurationSelect;
 let breakDurationSelect;
@@ -169,7 +170,8 @@ function updateDisplay() {
   const totalDuration = getDuration(currentMode);
   displayEl.textContent = formatMMSS(timeRemaining);
   modeLabelEl.textContent = currentMode === "work" ? "Work" : "Break";
-  startPauseBtn.textContent = isRunning ? "Pause" : "Start";
+  if (startPauseLabelEl) startPauseLabelEl.textContent = isRunning ? "Pause" : "Start";
+  if (startPauseBtn) startPauseBtn.setAttribute("aria-label", isRunning ? "Pause" : "Start");
   rootEl.setAttribute("data-mode", currentMode);
   document.body.setAttribute("data-mode", currentMode);
 
@@ -235,19 +237,32 @@ function createUI() {
   const controls = document.createElement("div");
   controls.className = "controls";
 
+  const startWrap = document.createElement("div");
+  startWrap.className = "control-btn-wrap";
   startPauseBtn = document.createElement("button");
   startPauseBtn.type = "button";
-  startPauseBtn.className = "btn btn-primary";
+  startPauseBtn.className = "btn btn-hifi btn-hifi-primary";
+  startPauseBtn.setAttribute("aria-label", "Start");
+  startPauseLabelEl = document.createElement("span");
+  startPauseLabelEl.className = "control-btn-label";
+  startPauseLabelEl.textContent = "Start";
+  startWrap.append(startPauseLabelEl, startPauseBtn);
 
+  const resetWrap = document.createElement("div");
+  resetWrap.className = "control-btn-wrap";
   const resetBtn = document.createElement("button");
   resetBtn.type = "button";
-  resetBtn.className = "btn btn-secondary";
-  resetBtn.textContent = "Reset";
+  resetBtn.className = "btn btn-hifi btn-hifi-secondary";
+  resetBtn.setAttribute("aria-label", "Reset");
+  const resetLabel = document.createElement("span");
+  resetLabel.className = "control-btn-label";
+  resetLabel.textContent = "Reset";
+  resetWrap.append(resetLabel, resetBtn);
 
   startPauseBtn.addEventListener("click", startPause);
   resetBtn.addEventListener("click", reset);
 
-  controls.append(startPauseBtn, resetBtn);
+  controls.append(startWrap, resetWrap);
 
   // --- Settings: custom durations (5, 10, 15, 20 sec) ----------------------
   const settingsEl = document.createElement("div");

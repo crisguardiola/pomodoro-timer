@@ -95,19 +95,24 @@ body[data-mode="break"] {
 
 body {
   margin: 0;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   font-family: var(--font-family);
   background-color: var(--color-bg-page);
   transition: background-color var(--transition-slow), color var(--transition-normal);
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 #app {
   width: 100%;
-  min-height: 100vh;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* Two-column layout: left = timer (centred), right = reserved */
@@ -116,30 +121,34 @@ body {
   flex: 1;
   width: 100%;
   min-height: 0;
+  overflow: hidden;
 }
 
 .column-left {
   flex: 1;
+  min-height: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: var(--space-3xl) 0 var(--space-3xl) var(--space-3xl);
-  overflow: visible;
+  align-items: stretch;
+  padding: 0 0 var(--space-3xl) var(--space-3xl);
+  overflow: hidden;
 }
 
 .column-left > * {
   transform: scale(2.25);
   transform-origin: center center;
+  min-height: 0;
 }
 
 .column-right {
   flex: 1;
   min-width: 0;
+  min-height: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: var(--space-3xl) var(--space-3xl) var(--space-3xl) 0;
-  overflow: visible;
+  padding: 0 var(--space-3xl) var(--space-3xl) 0;
+  overflow: hidden;
 }
 
 .column-right > * {
@@ -157,10 +166,28 @@ body {
 
 /* --- Timer root (theme is applied via :root / body[data-mode]) --------------- */
 .timer-root {
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
+  align-items: center;
   text-align: center;
-  padding: var(--space-4xl) var(--space-3xl);
+  padding: 0 var(--space-3xl) var(--space-4xl);
   color: var(--color-text);
   transition: color var(--transition-normal);
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.timer-root .mode-label {
+  align-self: end;
+}
+
+.timer-root .analog-clock-wrap {
+  align-self: center;
+}
+
+.timer-root .controls {
+  align-self: start;
 }
 
 /* --- Settings corner entry (trigger + dropdown panel) ------------------------ */
@@ -278,7 +305,7 @@ body {
 .analog-clock-wrap {
   display: flex;
   justify-content: center;
-  margin: var(--space-xl) 0 var(--space-lg);
+  margin: 0;
   overflow: visible;
 }
 
@@ -348,12 +375,28 @@ body {
   pointer-events: none;
 }
 
-/* --- Controls --------------------------------------------------------------- */
+/* --- Controls (separate block below clock) ---------------------------------- */
 .controls {
   display: flex;
-  gap: var(--space-lg);
+  gap: var(--space-2xl);
   justify-content: center;
   flex-wrap: wrap;
+  align-items: flex-end;
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-2xl);
+}
+
+.control-btn-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.control-btn-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
 }
 
 .btn {
@@ -364,6 +407,64 @@ body {
   border: var(--border-width) solid transparent;
   cursor: pointer;
   transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+/* Vintage hi-fi tactile buttons: circular, domed, dark ring, muted centre (2x smaller, label outside) */
+.btn-hifi {
+  width: 2.125rem;
+  height: 2.125rem;
+  padding: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0;
+  /* Dark outer ring (bezel) */
+  border: 3px solid #1a1510;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.25),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.35),
+    inset -1px -1px 4px rgba(0, 0, 0, 0.2);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.btn-hifi:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.3),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.4),
+    inset -1px -1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.btn-hifi:active {
+  transform: translateY(0);
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.3),
+    inset 1px 1px 5px rgba(0, 0, 0, 0.15),
+    inset -1px -1px 3px rgba(255, 255, 255, 0.1);
+}
+
+/* Both buttons: same soft muted warm centre (old amplifier knob) */
+.btn-hifi-primary,
+.btn-hifi-secondary {
+  background: radial-gradient(
+    circle at 35% 35%,
+    #c9a86a,
+    #a68b52 45%,
+    #8b7344 100%
+  );
+  color: #2d2416;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-hifi-primary:hover,
+.btn-hifi-secondary:hover {
+  background: radial-gradient(
+    circle at 35% 35%,
+    #d4b378,
+    #b0985e 45%,
+    #967a4a 100%
+  );
 }
 
 .btn-primary {
@@ -460,19 +561,20 @@ body {
 @media (max-width: 900px) {
   .layout-columns {
     flex-direction: column;
-    min-height: auto;
+    min-height: 0;
   }
 
   .column-left,
   .column-right {
-    flex: none;
-    min-height: min(50vh, 320px);
+    flex: 1;
+    min-height: 0;
     width: 100%;
   }
 
   .column-left > *,
   .column-right > * {
     transform: scale(1.5);
+    max-height: 100%;
   }
 }
 
@@ -480,7 +582,6 @@ body {
 @media (max-width: 600px) {
   .column-left,
   .column-right {
-    min-height: min(45vh, 280px);
     padding: var(--space-xl);
   }
 
@@ -509,7 +610,6 @@ body {
 @media (max-width: 480px) {
   .column-left,
   .column-right {
-    min-height: auto;
     padding: var(--space-lg);
   }
 
@@ -544,10 +644,16 @@ body {
   }
 
   .controls {
-    gap: var(--space-md);
+    gap: var(--space-xl);
   }
 
-  .btn {
+  .btn-hifi {
+    width: 1.875rem;
+    height: 1.875rem;
+    border-width: 2px;
+  }
+
+  .btn:not(.btn-hifi) {
     padding: 0.5rem var(--space-xl);
     font-size: var(--font-size-md);
   }
