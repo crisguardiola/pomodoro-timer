@@ -294,44 +294,7 @@ function createUI() {
   breakRow.append(breakLabel, breakDurationSelect);
   settingsEl.append(workRow, breakRow);
 
-  // --- Settings entry: corner trigger + dropdown panel -----------------------
-  const settingsCorner = document.createElement("div");
-  settingsCorner.className = "settings-corner";
-
-  const settingsTrigger = document.createElement("button");
-  settingsTrigger.type = "button";
-  settingsTrigger.className = "settings-trigger";
-  settingsTrigger.setAttribute("aria-label", "Open settings");
-  settingsTrigger.setAttribute("aria-expanded", "false");
-  settingsTrigger.setAttribute("aria-haspopup", "true");
-  settingsTrigger.textContent = "Settings";
-
-  const settingsPanel = document.createElement("div");
-  settingsPanel.className = "settings-panel";
-  settingsPanel.setAttribute("role", "dialog");
-  settingsPanel.setAttribute("aria-label", "Timer settings");
-  const panelTitle = document.createElement("div");
-  panelTitle.className = "settings-panel-title";
-  panelTitle.textContent = "Work & break";
-  settingsPanel.append(panelTitle, settingsEl);
-
-  settingsTrigger.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const open = settingsPanel.classList.toggle("is-open");
-    settingsTrigger.setAttribute("aria-expanded", String(open));
-  });
-
-  document.addEventListener("click", () => {
-    if (settingsPanel.classList.contains("is-open")) {
-      settingsPanel.classList.remove("is-open");
-      settingsTrigger.setAttribute("aria-expanded", "false");
-    }
-  });
-  settingsPanel.addEventListener("click", (e) => e.stopPropagation());
-
-  settingsCorner.append(settingsTrigger, settingsPanel);
-
-  // --- Keyboard shortcuts legend ---------------------------------------------
+  // --- Keyboard shortcuts legend (used inside settings panel) -----------------
   const legendEl = document.createElement("section");
   legendEl.className = "shortcuts-legend";
   legendEl.setAttribute("aria-label", "Keyboard shortcuts");
@@ -353,7 +316,44 @@ function createUI() {
   legendList.append(spaceRow, rRow);
   legendEl.append(legendTitle, legendList);
 
-  rootEl.append(modeLabelEl, clockWrap, controls, legendEl);
+  // --- Settings entry: corner trigger + dropdown panel -----------------------
+  const settingsCorner = document.createElement("div");
+  settingsCorner.className = "settings-corner";
+
+  const settingsTrigger = document.createElement("button");
+  settingsTrigger.type = "button";
+  settingsTrigger.className = "settings-trigger";
+  settingsTrigger.setAttribute("aria-label", "Open settings");
+  settingsTrigger.setAttribute("aria-expanded", "false");
+  settingsTrigger.setAttribute("aria-haspopup", "true");
+  settingsTrigger.textContent = "Settings";
+
+  const settingsPanel = document.createElement("div");
+  settingsPanel.className = "settings-panel";
+  settingsPanel.setAttribute("role", "dialog");
+  settingsPanel.setAttribute("aria-label", "Timer settings");
+  const panelTitle = document.createElement("div");
+  panelTitle.className = "settings-panel-title";
+  panelTitle.textContent = "Work & break";
+  settingsPanel.append(panelTitle, settingsEl, legendEl);
+
+  settingsTrigger.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = settingsPanel.classList.toggle("is-open");
+    settingsTrigger.setAttribute("aria-expanded", String(open));
+  });
+
+  document.addEventListener("click", () => {
+    if (settingsPanel.classList.contains("is-open")) {
+      settingsPanel.classList.remove("is-open");
+      settingsTrigger.setAttribute("aria-expanded", "false");
+    }
+  });
+  settingsPanel.addEventListener("click", (e) => e.stopPropagation());
+
+  settingsCorner.append(settingsTrigger, settingsPanel);
+
+  rootEl.append(modeLabelEl, clockWrap, controls);
   app.append(settingsCorner, rootEl);
 }
 
