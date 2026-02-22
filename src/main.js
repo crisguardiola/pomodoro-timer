@@ -38,7 +38,6 @@ let currentMode = "work";
 
 // --- DOM references (set in init) --------------------------------------------
 let displayEl;
-let modeLabelEl;
 let startPauseBtn;
 let startPauseLabelEl;
 let rootEl;
@@ -46,6 +45,8 @@ let workDurationSelect;
 let breakDurationSelect;
 let clockHandEl;
 let clockFaceEl;
+/** Mode label inside clock face ("Work" / "Break") */
+let clockFaceModeEl;
 
 /** AudioContext for notification sound (created on first use / user gesture). */
 let audioContext = null;
@@ -193,10 +194,10 @@ function tick() {
  * Updates the DOM: countdown text, analog clock hand & ticks, Start/Pause label, mode label, and theme.
  */
 function updateDisplay() {
-  if (!displayEl || !modeLabelEl || !startPauseBtn || !rootEl) return;
+  if (!displayEl || !startPauseBtn || !rootEl) return;
   const totalDuration = getDuration(currentMode);
   displayEl.textContent = formatMMSS(timeRemaining);
-  modeLabelEl.textContent = currentMode === "work" ? "Work" : "Break";
+  if (clockFaceModeEl) clockFaceModeEl.textContent = currentMode === "work" ? "Work" : "Break";
   if (startPauseLabelEl) startPauseLabelEl.textContent = isRunning ? "Pause" : "Start";
   if (startPauseBtn) startPauseBtn.setAttribute("aria-label", isRunning ? "Pause" : "Start");
   rootEl.setAttribute("data-mode", currentMode);
@@ -233,10 +234,6 @@ function createUI() {
   rootEl.className = "timer-root";
   rootEl.setAttribute("data-mode", currentMode);
 
-  modeLabelEl = document.createElement("div");
-  modeLabelEl.className = "mode-label";
-  modeLabelEl.setAttribute("aria-live", "polite");
-
   // --- Analog clock: face, second ticks, hand ---------------------------------
   const clockWrap = document.createElement("div");
   clockWrap.className = "analog-clock-wrap";
@@ -258,6 +255,12 @@ function createUI() {
   displayEl.className = "countdown";
   displayEl.setAttribute("aria-live", "polite");
   clockFaceEl.appendChild(displayEl);
+
+  clockFaceModeEl = document.createElement("div");
+  clockFaceModeEl.className = "clock-face-mode";
+  clockFaceModeEl.setAttribute("aria-hidden", "true");
+  clockFaceModeEl.textContent = currentMode === "work" ? "Work" : "Break";
+  clockFaceEl.appendChild(clockFaceModeEl);
 
   clockWrap.appendChild(clockFaceEl);
 
@@ -405,7 +408,7 @@ function createUI() {
 
   settingsCorner.append(settingsTrigger, settingsPanel);
 
-  rootEl.append(modeLabelEl, clockWrap, controls);
+  rootEl.append(clockWrap, controls);
 
   // Two-column layout: left = timer (centred), right = Braun-style speaker + music type buttons
   const layoutColumns = document.createElement("div");
@@ -561,10 +564,7 @@ function createRadioDial() {
     tick.textContent = v;
     fmBody.appendChild(tick);
   }
-  const fmUnits = document.createElement("div");
-  fmUnits.className = "radio-dial-scale-units";
-  fmUnits.textContent = "MHz";
-  fmScale.append(fmLabel, fmBody, fmUnits);
+  fmScale.append(fmLabel, fmBody);
 
   // AM strip: 550–1600 kHz
   const amScale = document.createElement("div");
@@ -583,10 +583,7 @@ function createRadioDial() {
     tick.textContent = v;
     amBody.appendChild(tick);
   }
-  const amUnits = document.createElement("div");
-  amUnits.className = "radio-dial-scale-units";
-  amUnits.textContent = "kHz";
-  amScale.append(amLabel, amBody, amUnits);
+  amScale.append(amLabel, amBody);
 
   scalesWrap.append(fmScale, amScale);
   container.appendChild(scalesWrap);

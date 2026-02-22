@@ -259,36 +259,25 @@ body {
   min-height: 120px;
 }
 
+/* One continuous vertical line per scale */
+.radio-dial-scale-body::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-border);
+}
+
 .radio-dial-tick {
   position: absolute;
   left: 0;
   transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  gap: 2px;
+  padding-left: 4px;
   font-size: 0.6rem;
   color: var(--color-text);
   box-sizing: border-box;
-}
-
-.radio-dial-tick::before {
-  content: "";
-  display: block;
-  width: 2px;
-  height: 6px;
-  background: var(--color-border);
-  flex-shrink: 0;
-}
-
-.radio-dial-tick-major::before {
-  height: 10px;
-}
-
-.radio-dial-scale-units {
-  font-size: 0.6rem;
-  color: var(--color-text);
-  opacity: 0.9;
-  margin-top: var(--space-xs);
 }
 
 .radio-dial-indicator {
@@ -429,15 +418,13 @@ body {
   overflow: hidden;
 }
 
-.timer-root .mode-label {
-  align-self: end;
-}
-
 .timer-root .analog-clock-wrap {
+  grid-row: 2;
   align-self: center;
 }
 
 .timer-root .controls {
+  grid-row: 3;
   align-self: start;
 }
 
@@ -543,15 +530,6 @@ body {
 }
 
 /* --- Mode label ------------------------------------------------------------- */
-.mode-label {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide);
-  margin-bottom: var(--space-md);
-  color: var(--color-accent);
-}
-
 /* --- Analog clock (vintage dial timer) --------------------------------------- */
 .analog-clock-wrap {
   display: flex;
@@ -624,6 +602,20 @@ body {
   line-height: var(--line-height-tight);
   margin: 0;
   pointer-events: none;
+}
+
+.clock-face-mode {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  transform: translate(-50%, 0);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: capitalize;
+  margin: 0;
+  pointer-events: none;
+  color: var(--color-text);
+  opacity: 0.85;
 }
 
 /* --- Controls (separate block below clock) ---------------------------------- */
@@ -892,6 +884,11 @@ body {
 
   .countdown {
     font-size: 1.25rem;
+  }
+
+  .clock-face-mode {
+    font-size: 0.65rem;
+    top: 57%;
   }
 
   .controls {
