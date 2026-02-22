@@ -354,7 +354,17 @@ function createUI() {
   settingsCorner.append(settingsTrigger, settingsPanel);
 
   rootEl.append(modeLabelEl, clockWrap, controls);
-  app.append(settingsCorner, rootEl);
+
+  // Two-column layout: left = timer (centred), right = reserved for later
+  const layoutColumns = document.createElement("div");
+  layoutColumns.className = "layout-columns";
+  const columnLeft = document.createElement("div");
+  columnLeft.className = "column-left";
+  const columnRight = document.createElement("div");
+  columnRight.className = "column-right";
+  columnLeft.appendChild(rootEl);
+  layoutColumns.append(columnLeft, columnRight);
+  app.append(settingsCorner, layoutColumns);
 }
 
 /**

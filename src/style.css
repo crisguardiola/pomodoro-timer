@@ -96,9 +96,6 @@ body[data-mode="break"] {
 body {
   margin: 0;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-family: var(--font-family);
   background-color: var(--color-bg-page);
   transition: background-color var(--transition-slow), color var(--transition-normal);
@@ -106,8 +103,31 @@ body {
 
 #app {
   width: 100%;
-  max-width: 320px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Two-column layout: left = timer (centred), right = reserved */
+.layout-columns {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+}
+
+.column-left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: var(--space-3xl);
+}
+
+.column-right {
+  flex: 1;
+  min-width: 0;
+  /* Empty for now; content to be added later */
 }
 
 /* --- Timer root (theme is applied via :root / body[data-mode]) --------------- */
