@@ -377,8 +377,8 @@ function createBraunSpeaker() {
   const size = 200;
   const r = 90;
   const gap = 8; // central vertical gap
-  const lineSpacing = 3;
-  const strokeWidth = 1.8;
+  const lineSpacing = 7;
+  const strokeWidth = 2.2;
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
   svg.setAttribute("aria-hidden", "true");

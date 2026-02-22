@@ -123,7 +123,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: var(--space-3xl);
+  padding: var(--space-3xl) 0 var(--space-3xl) var(--space-3xl);
   overflow: visible;
 }
 
@@ -138,7 +138,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: var(--space-3xl);
+  padding: var(--space-3xl) var(--space-3xl) var(--space-3xl) 0;
   overflow: visible;
 }
 
