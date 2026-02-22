@@ -217,7 +217,7 @@ function createUI() {
   clockFaceEl.className = "analog-clock-face";
   for (let i = 0; i < 20; i++) {
     const tick = document.createElement("div");
-    tick.className = "analog-clock-tick";
+    tick.className = "analog-clock-tick" + (i % 5 === 0 ? " analog-clock-tick-major" : "");
     tick.setAttribute("data-tick-index", String(i));
     clockFaceEl.appendChild(tick);
   }

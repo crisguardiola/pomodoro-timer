@@ -164,11 +164,12 @@ body {
   color: var(--color-accent);
 }
 
-/* --- Analog clock ------------------------------------------------------------ */
+/* --- Analog clock (vintage dial timer) --------------------------------------- */
 .analog-clock-wrap {
   display: flex;
   justify-content: center;
   margin: var(--space-xl) 0 var(--space-lg);
+  overflow: visible;
 }
 
 .analog-clock-face {
@@ -179,32 +180,45 @@ body {
   border: 3px solid var(--color-border);
   background-color: var(--color-bg-page);
   box-shadow: inset 0 0 0 2px var(--color-bg-timer);
+  overflow: visible;
 }
 
+/* Second markers around the outside: small tick at each second */
 .analog-clock-tick {
   position: absolute;
   left: 50%;
-  top: 0;
+  top: -10px;
   width: 2px;
   height: 10px;
   margin-left: -1px;
   background-color: var(--color-accent);
-  transform-origin: 1px 90px; /* center of 180px-tall face */
-  opacity: 0.75;
+  transform-origin: 1px 100px; /* face center (90, 90) in tick coords */
+  opacity: 0.8;
 }
 
-/* Triangle arrow: tip points to 12 o'clock; base at center; rotates with transform-origin at base center */
+/* Larger tick at every 5 seconds */
+.analog-clock-tick-major {
+  top: -16px;
+  width: 3px;
+  height: 16px;
+  margin-left: -1.5px;
+  transform-origin: 1.5px 106px;
+  opacity: 1;
+}
+
+/* Small solid triangle on the rim, tip on rim, base toward center; rotates around the dial */
 .analog-clock-hand {
   position: absolute;
+  top: 0;
   left: 50%;
-  bottom: 50%;
   width: 0;
   height: 0;
-  margin-left: -10px;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 72px solid var(--color-accent-strong);
-  transform-origin: center bottom;
+  margin-left: -5px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 12px solid var(--color-accent-strong);
+  /* Origin = face center so the hand travels along the circumference */
+  transform-origin: 5px 90px;
   transform: rotate(0deg);
   transition: transform 0.2s ease-out;
   filter: drop-shadow(0 0 1px var(--palette-shadow));
