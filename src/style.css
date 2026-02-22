@@ -114,21 +114,79 @@ body {
 .timer-root {
   text-align: center;
   padding: var(--space-4xl) var(--space-3xl);
-  border-radius: var(--radius-xl);
-  background-color: var(--color-bg-timer);
   color: var(--color-text);
-  border: var(--border-width) solid var(--color-border);
-  transition: background-color var(--transition-slow), color var(--transition-normal), border-color var(--transition-normal);
+  transition: color var(--transition-normal);
 }
 
-/* --- Settings (Stage 2: custom durations) ------------------------------------ */
+/* --- Settings corner entry (trigger + dropdown panel) ------------------------ */
+.settings-corner {
+  position: fixed;
+  top: var(--space-xl);
+  right: var(--space-xl);
+  z-index: 100;
+}
+
+.settings-trigger {
+  padding: var(--space-sm) var(--space-lg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  font-family: var(--font-family);
+  color: var(--color-text);
+  background-color: var(--color-bg-timer);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.settings-trigger:hover {
+  background-color: color-mix(in srgb, var(--color-accent) 12%, var(--color-bg-timer));
+  border-color: var(--color-accent-strong);
+}
+
+.settings-panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: var(--space-sm);
+  min-width: 220px;
+  padding: var(--space-lg);
+  background-color: var(--color-bg-timer);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-toast);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity var(--transition-normal), visibility var(--transition-normal), transform var(--transition-normal);
+}
+
+.settings-panel.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.settings-panel-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-accent);
+  margin-bottom: var(--space-md);
+}
+
+.settings-panel .settings {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* --- Settings content (work/break durations) --------------------------------- */
 .settings {
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
-  margin-bottom: var(--space-2xl);
-  padding-bottom: var(--space-2xl);
-  border-bottom: 1px solid var(--color-divider);
 }
 
 .settings-row {
@@ -224,13 +282,18 @@ body {
   filter: drop-shadow(0 0 1px var(--palette-shadow));
 }
 
-/* --- Countdown display (MM:SS) ----------------------------------------------- */
+/* --- Countdown display (MM:SS) — inside clock face --------------------------- */
 .countdown {
-  font-size: var(--font-size-display);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
   font-weight: var(--font-weight-bold);
   font-variant-numeric: tabular-nums;
   line-height: var(--line-height-tight);
-  margin: 0 0 var(--space-3xl);
+  margin: 0;
+  pointer-events: none;
 }
 
 /* --- Controls --------------------------------------------------------------- */

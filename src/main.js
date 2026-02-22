@@ -224,11 +224,13 @@ function createUI() {
   clockHandEl = document.createElement("div");
   clockHandEl.className = "analog-clock-hand";
   clockFaceEl.appendChild(clockHandEl);
-  clockWrap.appendChild(clockFaceEl);
 
   displayEl = document.createElement("div");
   displayEl.className = "countdown";
   displayEl.setAttribute("aria-live", "polite");
+  clockFaceEl.appendChild(displayEl);
+
+  clockWrap.appendChild(clockFaceEl);
 
   const controls = document.createElement("div");
   controls.className = "controls";
@@ -292,6 +294,43 @@ function createUI() {
   breakRow.append(breakLabel, breakDurationSelect);
   settingsEl.append(workRow, breakRow);
 
+  // --- Settings entry: corner trigger + dropdown panel -----------------------
+  const settingsCorner = document.createElement("div");
+  settingsCorner.className = "settings-corner";
+
+  const settingsTrigger = document.createElement("button");
+  settingsTrigger.type = "button";
+  settingsTrigger.className = "settings-trigger";
+  settingsTrigger.setAttribute("aria-label", "Open settings");
+  settingsTrigger.setAttribute("aria-expanded", "false");
+  settingsTrigger.setAttribute("aria-haspopup", "true");
+  settingsTrigger.textContent = "Settings";
+
+  const settingsPanel = document.createElement("div");
+  settingsPanel.className = "settings-panel";
+  settingsPanel.setAttribute("role", "dialog");
+  settingsPanel.setAttribute("aria-label", "Timer settings");
+  const panelTitle = document.createElement("div");
+  panelTitle.className = "settings-panel-title";
+  panelTitle.textContent = "Work & break";
+  settingsPanel.append(panelTitle, settingsEl);
+
+  settingsTrigger.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = settingsPanel.classList.toggle("is-open");
+    settingsTrigger.setAttribute("aria-expanded", String(open));
+  });
+
+  document.addEventListener("click", () => {
+    if (settingsPanel.classList.contains("is-open")) {
+      settingsPanel.classList.remove("is-open");
+      settingsTrigger.setAttribute("aria-expanded", "false");
+    }
+  });
+  settingsPanel.addEventListener("click", (e) => e.stopPropagation());
+
+  settingsCorner.append(settingsTrigger, settingsPanel);
+
   // --- Keyboard shortcuts legend ---------------------------------------------
   const legendEl = document.createElement("section");
   legendEl.className = "shortcuts-legend";
@@ -314,8 +353,8 @@ function createUI() {
   legendList.append(spaceRow, rRow);
   legendEl.append(legendTitle, legendList);
 
-  rootEl.append(settingsEl, modeLabelEl, clockWrap, displayEl, controls, legendEl);
-  app.append(rootEl);
+  rootEl.append(modeLabelEl, clockWrap, controls, legendEl);
+  app.append(settingsCorner, rootEl);
 }
 
 /**
