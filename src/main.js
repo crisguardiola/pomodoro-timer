@@ -370,15 +370,38 @@ function createUI() {
 
   rootEl.append(modeLabelEl, clockWrap, controls);
 
-  // Two-column layout: left = timer (centred), right = Braun-style speaker
+  // Two-column layout: left = timer (centred), right = Braun-style speaker + music type buttons
   const layoutColumns = document.createElement("div");
   layoutColumns.className = "layout-columns";
   const columnLeft = document.createElement("div");
   columnLeft.className = "column-left";
   const columnRight = document.createElement("div");
   columnRight.className = "column-right";
+
+  const columnRightInner = document.createElement("div");
+  columnRightInner.className = "column-right-inner";
+  columnRightInner.appendChild(createBraunSpeaker());
+
+  const musicTypes = ["Classical", "Jazz", "Ambient", "Lo-Fi", "Focus"];
+  const musicControls = document.createElement("div");
+  musicControls.className = "music-controls";
+  musicTypes.forEach((label) => {
+    const wrap = document.createElement("div");
+    wrap.className = "control-btn-wrap";
+    const lbl = document.createElement("span");
+    lbl.className = "control-btn-label";
+    lbl.textContent = label;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn btn-hifi btn-hifi-secondary";
+    btn.setAttribute("aria-label", `Music: ${label}`);
+    wrap.append(lbl, btn);
+    musicControls.appendChild(wrap);
+  });
+  columnRightInner.appendChild(musicControls);
+  columnRight.appendChild(columnRightInner);
+
   columnLeft.appendChild(rootEl);
-  columnRight.appendChild(createBraunSpeaker());
   layoutColumns.append(columnLeft, columnRight);
   app.append(settingsCorner, layoutColumns);
 }
