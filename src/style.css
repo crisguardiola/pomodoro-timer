@@ -188,6 +188,15 @@ body {
   grid-row: 2;
 }
 
+/* Hidden <audio> for background music (no layout or visual) */
+.music-audio {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .column-right-inner .music-controls {
   grid-row: 3;
   align-self: start;

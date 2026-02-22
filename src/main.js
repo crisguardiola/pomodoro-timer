@@ -6,6 +6,15 @@
 /** Allowed duration options in seconds (user can pick 5, 10, 15, or 20) */
 const ALLOWED_DURATIONS = [5, 10, 15, 20];
 
+/** Music genre -> asset URL (files in src/assets/music/) */
+const MUSIC_ASSET_URLS = {
+  classical: new URL("./assets/music/classical.mp3", import.meta.url).href,
+  jazz: new URL("./assets/music/jazz.mp3", import.meta.url).href,
+  ambient: new URL("./assets/music/ambient.mp3", import.meta.url).href,
+  "lo-fi": new URL("./assets/music/lo-fi.mp3", import.meta.url).href,
+  focus: new URL("./assets/music/focus.mp3", import.meta.url).href,
+};
+
 // --- State (single source of truth) ------------------------------------------
 /** Work session duration in seconds (one of ALLOWED_DURATIONS) */
 let workDuration = 10;
@@ -31,6 +40,12 @@ let clockFaceEl;
 
 /** AudioContext for notification sound (created on first use / user gesture). */
 let audioContext = null;
+
+/** Currently selected music genre (null = no music). Radio behaviour: only one at a time. */
+let selectedMusicType = null;
+
+/** <audio> for background music (created in init). */
+let musicAudioEl = null;
 
 // --- Helpers -----------------------------------------------------------------
 
@@ -392,6 +407,13 @@ function createUI() {
   columnRightInner.className = "column-right-inner";
   columnRightInner.appendChild(createBraunSpeaker());
 
+  // Background music: one <audio>, looped; play/stop when user selects a genre
+  musicAudioEl = document.createElement("audio");
+  musicAudioEl.className = "music-audio";
+  musicAudioEl.loop = true;
+  musicAudioEl.setAttribute("aria-hidden", "true");
+  columnRightInner.appendChild(musicAudioEl);
+
   const musicTypes = ["classical", "jazz", "ambient", "lo-fi", "focus"];
   const musicControls = document.createElement("div");
   musicControls.className = "music-controls";
@@ -406,9 +428,22 @@ function createUI() {
     btn.className = "btn btn-hifi btn-hifi-secondary";
     btn.setAttribute("aria-label", `Music: ${label}`);
     btn.setAttribute("aria-pressed", "false");
+    btn.setAttribute("data-music-type", label);
     btn.addEventListener("click", () => {
-      const pressed = btn.classList.toggle("is-pressed");
-      btn.setAttribute("aria-pressed", String(pressed));
+      const newSelection = selectedMusicType === label ? null : label;
+      selectedMusicType = newSelection;
+      musicControls.querySelectorAll(".btn-hifi").forEach((b) => {
+        const isPressed = b.getAttribute("data-music-type") === selectedMusicType;
+        b.classList.toggle("is-pressed", isPressed);
+        b.setAttribute("aria-pressed", String(isPressed));
+      });
+      if (selectedMusicType) {
+        musicAudioEl.src = MUSIC_ASSET_URLS[selectedMusicType];
+        musicAudioEl.play().catch(() => {});
+      } else {
+        musicAudioEl.pause();
+        musicAudioEl.removeAttribute("src");
+      }
     });
     wrap.append(lbl, btn);
     musicControls.appendChild(wrap);
