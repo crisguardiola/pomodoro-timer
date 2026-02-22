@@ -6,13 +6,13 @@
 /** Allowed duration options in seconds (user can pick 5, 10, 15, or 20) */
 const ALLOWED_DURATIONS = [5, 10, 15, 20];
 
-/** Music genre -> asset URL (files in src/assets/music/) */
+/** Music genre -> URL (files in public/music/, served at /music/ by Vite) */
 const MUSIC_ASSET_URLS = {
-  classical: new URL("./assets/music/classical.mp3", import.meta.url).href,
-  jazz: new URL("./assets/music/jazz.mp3", import.meta.url).href,
-  ambient: new URL("./assets/music/ambient.mp3", import.meta.url).href,
-  "lo-fi": new URL("./assets/music/lo-fi.mp3", import.meta.url).href,
-  focus: new URL("./assets/music/focus.mp3", import.meta.url).href,
+  classical: "/music/classical.mp3",
+  jazz: "/music/jazz.mp3",
+  ambient: "/music/ambient.mp3",
+  "lo-fi": "/music/lo-fi.mp3",
+  focus: "/music/focus.mp3",
 };
 
 // --- State (single source of truth) ------------------------------------------
@@ -438,8 +438,22 @@ function createUI() {
         b.setAttribute("aria-pressed", String(isPressed));
       });
       if (selectedMusicType) {
-        musicAudioEl.src = MUSIC_ASSET_URLS[selectedMusicType];
-        musicAudioEl.play().catch(() => {});
+        const url = MUSIC_ASSET_URLS[selectedMusicType];
+        musicAudioEl.src = url;
+        const onCanPlay = () => {
+          musicAudioEl.removeEventListener("canplay", onCanPlay);
+          musicAudioEl.removeEventListener("error", onLoadErr);
+          musicAudioEl.play().catch(() => {});
+        };
+        const onLoadErr = () => {
+          musicAudioEl.removeEventListener("canplay", onCanPlay);
+          musicAudioEl.removeEventListener("error", onLoadErr);
+        };
+        musicAudioEl.addEventListener("canplay", onCanPlay);
+        musicAudioEl.addEventListener("error", onLoadErr);
+        if (musicAudioEl.readyState >= 2) {
+          onCanPlay();
+        }
       } else {
         musicAudioEl.pause();
         musicAudioEl.removeAttribute("src");
