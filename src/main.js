@@ -40,6 +40,7 @@ let currentMode = "work";
 let displayEl;
 let startPauseBtn;
 let startPauseLabelEl;
+let resetBtn;
 let rootEl;
 let workDurationSelect;
 let breakDurationSelect;
@@ -163,6 +164,14 @@ function reset() {
   isRunning = false;
   timeRemaining = getDuration(currentMode);
   updateDisplay();
+  // Unpress Start/Pause so it reflects "stopped" state (click or keyboard R).
+  if (startPauseBtn) {
+    startPauseBtn.classList.remove("is-pressed");
+    startPauseBtn.setAttribute("aria-pressed", "false");
+  }
+  // #region agent log
+  fetch('http://127.0.0.1:7835/ingest/ec33f536-3ff5-425b-bfcd-81aa775622ef',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'45769b'},body:JSON.stringify({sessionId:'45769b',location:'main.js:reset()',message:'reset() called',data:{clearsStartPauseBtn:true},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
+  // #endregion
 }
 
 /** Updates work or break duration from settings; resets current session if not running. */
@@ -281,7 +290,7 @@ function createUI() {
 
   const resetWrap = document.createElement("div");
   resetWrap.className = "control-btn-wrap";
-  const resetBtn = document.createElement("button");
+  resetBtn = document.createElement("button");
   resetBtn.type = "button";
   resetBtn.className = "btn btn-hifi btn-hifi-secondary";
   resetBtn.setAttribute("aria-label", "Reset");
@@ -297,9 +306,17 @@ function createUI() {
     startPauseBtn.setAttribute("aria-pressed", String(pressed));
   });
   resetBtn.addEventListener("click", () => {
+    // Momentary press: show pressed then release after 200ms (no toggle).
+    resetBtn.classList.add("is-pressed");
+    resetBtn.setAttribute("aria-pressed", "true");
     reset();
-    const pressed = resetBtn.classList.toggle("is-pressed");
-    resetBtn.setAttribute("aria-pressed", String(pressed));
+    setTimeout(() => {
+      resetBtn.classList.remove("is-pressed");
+      resetBtn.setAttribute("aria-pressed", "false");
+    }, 200);
+    // #region agent log
+    fetch('http://127.0.0.1:7835/ingest/ec33f536-3ff5-425b-bfcd-81aa775622ef',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'45769b'},body:JSON.stringify({sessionId:'45769b',location:'main.js:resetBtn.click',message:'Reset clicked',data:{momentaryPress:true,releaseAfter400ms:true},timestamp:Date.now(),hypothesisId:'H1',runId:'post-fix'})}).catch(()=>{});
+    // #endregion
   });
 
   controls.append(startWrap, resetWrap);
@@ -644,10 +661,25 @@ function handleKeyboardShortcuts(e) {
   if (e.key === " ") {
     e.preventDefault();
     startPause();
+    // Sync orange shadow to match running state (same as click).
+    if (startPauseBtn) {
+      startPauseBtn.classList.toggle("is-pressed", isRunning);
+      startPauseBtn.setAttribute("aria-pressed", String(isRunning));
+    }
     return;
   }
   if (e.key === "r" || e.key === "R") {
+    e.preventDefault();
     reset();
+    // Show same orange shadow as click: momentary press for 200ms.
+    if (resetBtn) {
+      resetBtn.classList.add("is-pressed");
+      resetBtn.setAttribute("aria-pressed", "true");
+      setTimeout(() => {
+        resetBtn.classList.remove("is-pressed");
+        resetBtn.setAttribute("aria-pressed", "false");
+      }, 200);
+    }
   }
 }
 
