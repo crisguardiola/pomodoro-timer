@@ -30,6 +30,16 @@ We'll add our own extensions.
 - themes
 - localStorage
 
+# #  Stage 3: 
+Extra functionality
+- speaker and dial that play different tracks
 
 # #  Stage 4:
-- UI
+UI
+- The UiUI will inspired by Dieter rams designs, giving it the feel of a physical object, a high-end piece of hardware.
+- On Dieter Rams products every element has a purpose, and nothing is added without reason.
+- UI is simple
+
+
+
+
