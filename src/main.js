@@ -198,7 +198,7 @@ function updateDisplay() {
   const totalDuration = getDuration(currentMode);
   displayEl.textContent = formatMMSS(timeRemaining);
   if (clockFaceModeEl) clockFaceModeEl.textContent = currentMode === "work" ? "Work" : "Break";
-  if (startPauseLabelEl) startPauseLabelEl.textContent = isRunning ? "Pause" : "Start";
+  if (startPauseLabelEl) startPauseLabelEl.textContent = isRunning ? "pause" : "start";
   if (startPauseBtn) startPauseBtn.setAttribute("aria-label", isRunning ? "Pause" : "Start");
   rootEl.setAttribute("data-mode", currentMode);
   document.body.setAttribute("data-mode", currentMode);
@@ -276,7 +276,7 @@ function createUI() {
   startPauseBtn.setAttribute("aria-pressed", "false");
   startPauseLabelEl = document.createElement("span");
   startPauseLabelEl.className = "control-btn-label";
-  startPauseLabelEl.textContent = "Start";
+  startPauseLabelEl.textContent = "start";
   startWrap.append(startPauseLabelEl, startPauseBtn);
 
   const resetWrap = document.createElement("div");
@@ -288,7 +288,7 @@ function createUI() {
   resetBtn.setAttribute("aria-pressed", "false");
   const resetLabel = document.createElement("span");
   resetLabel.className = "control-btn-label";
-  resetLabel.textContent = "Reset";
+  resetLabel.textContent = "reset";
   resetWrap.append(resetLabel, resetBtn);
 
   startPauseBtn.addEventListener("click", () => {

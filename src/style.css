@@ -722,7 +722,7 @@ body {
 
 /* Start / Reset labels in main controls */
 .timer-root .controls .control-btn-label {
-  text-transform: uppercase;
+  text-transform: lowercase;
 }
 
 .btn {
