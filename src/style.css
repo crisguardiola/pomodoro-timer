@@ -5,14 +5,15 @@
 /* --- Design tokens (custom properties) -------------------------------------- */
 :root {
   /* Base palette — work theme (warm). Change these to retheme the app. */
-  --palette-page-bg: #F3F3F3;
-  --palette-surface: #a3a3a3;
+  --palette-page-bg: #e4e4e4;
+  --palette-surface: #b4b4b4;
   --palette-text: #090101;
-  --palette-border: #747474;
-  --palette-accent: #090101;
+  --palette-text-secondary: #3d3d3d;
+  --palette-text-tertiary: #6b6b6b;
+  --palette-border: #313131;
+  --palette-accent: #010809;
   --palette-accent-strong: #FF3D00;
   --palette-accent-hover: #96A191;
-  --palette-divider: rgba(11, 17, 184, 0.25);
 
   /* Start/Reset (hi-fi) button gradient — work theme */
   --palette-btn-hifi-light: #788174;
@@ -33,6 +34,8 @@
   --color-bg-page: var(--palette-page-bg);
   --color-bg-timer: var(--palette-surface);
   --color-text: var(--palette-text);
+  --color-text-secondary: var(--palette-text-secondary);
+  --color-text-tertiary: var(--palette-text-tertiary);
   --color-border: var(--palette-border);
   --color-accent: var(--palette-accent);
   --color-accent-strong: var(--palette-accent-strong);
@@ -273,7 +276,7 @@ body {
   align-items: flex-start;
   font-family: var(--font-family);
   font-size: var(--dial-scale-label-font-size);
-  color: var(--color-text);
+  color: var(--color-text-secondary);
 }
 
 .radio-dial-scale-label {
@@ -309,7 +312,7 @@ body {
   transform: translateY(-50%);
   padding-left: var(--dial-scale-tick-padding-inline);
   font-size: var(--dial-scale-tick-font-size);
-  color: var(--color-text);
+  color: var(--color-text-secondary);
   box-sizing: border-box;
 }
 
@@ -664,7 +667,7 @@ body {
   text-transform: capitalize;
   margin: 0;
   pointer-events: none;
-  color: var(--color-text);
+  color: var(--color-text-secondary);
   opacity: 0.85;
 }
 
