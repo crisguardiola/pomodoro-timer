@@ -67,6 +67,20 @@
   /* Clock face and speaker same size */
   --size-clock-speaker: 180px;
 
+  /* Radio dial (FM/AM scale strip + indicator) */
+  --dial-width: 80px;
+  --dial-width-clamp: 28vw;
+  --dial-height: 200px;
+  --dial-scale-track-width: 1px;
+  --dial-scale-tick-line-length: 3px;
+  --dial-scale-label-font-size: 0.5rem;
+  --dial-scale-tick-font-size: 0.5rem;
+  --dial-scale-tick-padding-inline: 4px;
+  --dial-scale-body-min-height: 120px;
+  --dial-indicator-height: 4px;
+  --color-dial-indicator: var(--palette-accent-strong);
+  --color-dial-bg: #D4D4D4;
+
   /* Border radius */
   --radius-sm: 0.3rem;
   --radius-md: 0.4rem;
@@ -234,9 +248,9 @@ body {
 .radio-dial {
   align-self: center;
   position: relative;
-  width: min(80px, 28vw);
-  height: 200px;
-  background-color: var(--color-bg-timer);
+  width: min(var(--dial-width), var(--dial-width-clamp));
+  height: var(--dial-height);
+  background-color: var(--color-dial-bg);
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
   padding: var(--space-xs) var(--space-sm);
@@ -256,23 +270,26 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   font-family: var(--font-family);
-  font-size: var(--font-size-xs);
+  font-size: var(--dial-scale-label-font-size);
   color: var(--color-text);
 }
 
 .radio-dial-scale-label {
+  font-size: var(--dial-scale-label-font-size);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-wide);
   margin-bottom: var(--space-xs);
+  padding-left: calc(var(--dial-scale-track-width) + var(--dial-scale-tick-padding-inline));
+  box-sizing: border-box;
 }
 
 .radio-dial-scale-body {
   flex: 1;
   position: relative;
   width: 100%;
-  min-height: 120px;
+  min-height: var(--dial-scale-body-min-height);
 }
 
 /* One continuous vertical line per scale */
@@ -282,7 +299,7 @@ body {
   left: 0;
   top: 0;
   bottom: 0;
-  width: 2px;
+  width: var(--dial-scale-track-width);
   background: var(--color-border);
 }
 
@@ -290,18 +307,30 @@ body {
   position: absolute;
   left: 0;
   transform: translateY(-50%);
-  padding-left: 4px;
-  font-size: 0.6rem;
+  padding-left: var(--dial-scale-tick-padding-inline);
+  font-size: var(--dial-scale-tick-font-size);
   color: var(--color-text);
   box-sizing: border-box;
+}
+
+/* Short horizontal line from vertical track to number (same style as vertical track) */
+.radio-dial-tick::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: var(--dial-scale-tick-line-length);
+  height: var(--dial-scale-track-width);
+  transform: translateY(-50%);
+  background: var(--color-border);
 }
 
 .radio-dial-indicator {
   position: absolute;
   left: 0;
   right: 0;
-  height: 4px;
-  background-color: var(--palette-accent-strong);
+  height: var(--dial-indicator-height);
+  background-color: var(--color-dial-indicator);
   transform: translateY(-50%);
   transition: top var(--transition-normal);
   z-index: 1;
@@ -576,6 +605,11 @@ body {
   background-color: var(--color-accent);
   transform-origin: 1px 100px; /* face center (90, 90) in tick coords */
   opacity: 0.8;
+}
+
+/* Alternate tick colour with palette-accent-strong */
+.analog-clock-tick:nth-child(even) {
+  background-color: var(--palette-accent-strong);
 }
 
 /* Larger tick at every 5 seconds */
@@ -877,6 +911,11 @@ body {
 @media (max-width: 480px) {
   :root {
     --size-clock-speaker: 140px;
+    /* Dial: narrower on phone */
+    --dial-width-narrow: 64px;
+    --dial-width-narrow-clamp: 24vw;
+    --dial-height-narrow: 160px;
+    --dial-scale-body-min-height-narrow: 96px;
   }
 
   .column-left,
@@ -944,11 +983,11 @@ body {
   }
 
   .radio-dial {
-    width: min(64px, 24vw);
-    height: 160px;
+    width: min(var(--dial-width-narrow), var(--dial-width-narrow-clamp));
+    height: var(--dial-height-narrow);
   }
 
   .radio-dial-scale-body {
-    min-height: 96px;
+    min-height: var(--dial-scale-body-min-height-narrow);
   }
 }
