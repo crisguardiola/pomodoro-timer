@@ -501,7 +501,8 @@ function createBraunSpeaker() {
   const r = 90;
   const gap = 8; // central vertical gap
   const lineSpacing = 7;
-  const strokeWidth = 2.2;
+  const strokeWidth = 3; // slightly thicker lines
+  const depthOffset = 1.2; // offset for inner-shadow depth (light from top-left)
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
   svg.setAttribute("aria-hidden", "true");
@@ -512,7 +513,22 @@ function createBraunSpeaker() {
   for (let y = -r; y <= r; y += lineSpacing) {
     const x = Math.sqrt(Math.max(0, r * r - y * y));
     if (x <= halfGap) continue;
+    // Depth layer (darker, offset) — suggests groove / inner shadow, no drop shadow
+    const leftDepth = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    leftDepth.setAttribute("class", "braun-speaker-line-depth");
+    leftDepth.setAttribute("x1", -x + depthOffset);
+    leftDepth.setAttribute("y1", y + depthOffset);
+    leftDepth.setAttribute("x2", -halfGap + depthOffset);
+    leftDepth.setAttribute("y2", y + depthOffset);
+    const rightDepth = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    rightDepth.setAttribute("class", "braun-speaker-line-depth");
+    rightDepth.setAttribute("x1", halfGap + depthOffset);
+    rightDepth.setAttribute("y1", y + depthOffset);
+    rightDepth.setAttribute("x2", x + depthOffset);
+    rightDepth.setAttribute("y2", y + depthOffset);
+    // Main lines on top
     const left = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    left.setAttribute("class", "braun-speaker-line");
     left.setAttribute("x1", -x);
     left.setAttribute("y1", y);
     left.setAttribute("x2", -halfGap);
@@ -521,6 +537,7 @@ function createBraunSpeaker() {
     left.setAttribute("stroke-width", strokeWidth);
     left.setAttribute("stroke-linecap", "round");
     const right = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    right.setAttribute("class", "braun-speaker-line");
     right.setAttribute("x1", halfGap);
     right.setAttribute("y1", y);
     right.setAttribute("x2", x);
@@ -528,7 +545,7 @@ function createBraunSpeaker() {
     right.setAttribute("stroke", "currentColor");
     right.setAttribute("stroke-width", strokeWidth);
     right.setAttribute("stroke-linecap", "round");
-    g.append(left, right);
+    g.append(leftDepth, rightDepth, left, right);
   }
   svg.appendChild(g);
   return svg;

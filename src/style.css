@@ -255,13 +255,21 @@ body {
 }
 
 /* Braun-inspired circular speaker grille (right column) */
-/* Same size as timer clock face (--size-clock-speaker) */
+/* 10% larger than timer clock face (--size-clock-speaker) */
 .braun-speaker {
-  width: var(--size-clock-speaker);
-  height: var(--size-clock-speaker);
+  width: calc(var(--size-clock-speaker) * 1.1);
+  height: calc(var(--size-clock-speaker) * 1.1);
   color: var(--color-accent);
   opacity: 0.85;
   align-self: center;
+}
+
+/* Depth layer: darker stroke behind main lines (inner-shadow effect, no drop shadow) */
+.braun-speaker-line-depth {
+  stroke: currentColor;
+  stroke-opacity: 0.45;
+  stroke-width: 3;
+  stroke-linecap: round;
 }
 
 /* Vertical radio dial (FM / AM scales + horizontal indicator) */
@@ -374,8 +382,8 @@ body {
 /* Music buttons: enhanced 3D (shadows + gradients), toggleable pressed glow */
 .music-controls .btn-hifi {
   box-shadow:
-    0 4px 0 rgba(0, 0, 0, 0.35),
-    0 6px 12px rgba(0, 0, 0, 0.25),
+    2px 4px 0 rgba(0, 0, 0, 0.35),
+    2px 6px 12px rgba(0, 0, 0, 0.25),
     inset 0 2px 4px rgba(255, 255, 255, 0.4),
     inset 0 -2px 4px rgba(0, 0, 0, 0.25);
   transition: transform var(--transition-fast), box-shadow var(--transition-normal);
@@ -384,8 +392,8 @@ body {
 .music-controls .btn-hifi:hover {
   transform: translateY(-1px);
   box-shadow:
-    0 5px 0 rgba(0, 0, 0, 0.3),
-    0 8px 16px rgba(0, 0, 0, 0.28),
+    2px 5px 0 rgba(0, 0, 0, 0.3),
+    2px 8px 16px rgba(0, 0, 0, 0.28),
     inset 0 2px 4px rgba(255, 255, 255, 0.45),
     inset 0 -2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -393,8 +401,8 @@ body {
 .music-controls .btn-hifi:active {
   transform: translateY(2px);
   box-shadow:
-    0 2px 0 rgba(0, 0, 0, 0.4),
-    0 3px 8px rgba(0, 0, 0, 0.25),
+    1px 2px 0 rgba(0, 0, 0, 0.4),
+    2px 4px 8px rgba(0, 0, 0, 0.25),
     inset 0 2px 6px rgba(0, 0, 0, 0.2),
     inset 0 -1px 2px rgba(255, 255, 255, 0.1);
 }
@@ -402,8 +410,8 @@ body {
 .music-controls .btn-hifi.is-pressed {
   transform: translateY(2px);
   box-shadow:
-    0 2px 0 rgba(0, 0, 0, 0.4),
-    0 3px 8px rgba(0, 0, 0, 0.25),
+    1px 2px 0 rgba(0, 0, 0, 0.4),
+    2px 4px 8px rgba(0, 0, 0, 0.25),
     0 0 12px var(--palette-accent-strong),
     0 0 24px color-mix(in srgb, var(--palette-accent-strong) 60%, transparent),
     inset 0 2px 6px rgba(0, 0, 0, 0.2),
@@ -412,8 +420,8 @@ body {
 
 .music-controls .btn-hifi.is-pressed:hover {
   box-shadow:
-    0 2px 0 rgba(0, 0, 0, 0.4),
-    0 3px 8px rgba(0, 0, 0, 0.25),
+    1px 2px 0 rgba(0, 0, 0, 0.4),
+    2px 4px 8px rgba(0, 0, 0, 0.25),
     0 0 14px var(--palette-accent-strong),
     0 0 28px color-mix(in srgb, var(--palette-accent-strong) 50%, transparent),
     inset 0 2px 6px rgba(0, 0, 0, 0.2),
@@ -423,8 +431,8 @@ body {
 /* Start/Reset buttons: same 3D and toggleable pressed glow */
 .timer-root .controls .btn-hifi {
   box-shadow:
-    0 4px 0 rgba(0, 0, 0, 0.35),
-    0 6px 12px rgba(0, 0, 0, 0.25),
+    2px 4px 0 rgba(0, 0, 0, 0.35),
+    2px 6px 12px rgba(0, 0, 0, 0.25),
     inset 0 2px 4px rgba(255, 255, 255, 0.4),
     inset 0 -2px 4px rgba(0, 0, 0, 0.25);
   transition: transform var(--transition-fast), box-shadow var(--transition-normal);
@@ -433,8 +441,8 @@ body {
 .timer-root .controls .btn-hifi:hover {
   transform: translateY(-1px);
   box-shadow:
-    0 5px 0 rgba(0, 0, 0, 0.3),
-    0 8px 16px rgba(0, 0, 0, 0.28),
+    2px 5px 0 rgba(0, 0, 0, 0.3),
+    2px 8px 16px rgba(0, 0, 0, 0.28),
     inset 0 2px 4px rgba(255, 255, 255, 0.45),
     inset 0 -2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -442,8 +450,8 @@ body {
 .timer-root .controls .btn-hifi:active {
   transform: translateY(2px);
   box-shadow:
-    0 2px 0 rgba(0, 0, 0, 0.4),
-    0 3px 8px rgba(0, 0, 0, 0.25),
+    1px 2px 0 rgba(0, 0, 0, 0.4),
+    2px 4px 8px rgba(0, 0, 0, 0.25),
     inset 0 2px 6px rgba(0, 0, 0, 0.2),
     inset 0 -1px 2px rgba(255, 255, 255, 0.1);
 }
@@ -451,8 +459,8 @@ body {
 .timer-root .controls .btn-hifi.is-pressed {
   transform: translateY(2px);
   box-shadow:
-    0 2px 0 rgba(0, 0, 0, 0.4),
-    0 3px 8px rgba(0, 0, 0, 0.25),
+    1px 2px 0 rgba(0, 0, 0, 0.4),
+    2px 4px 8px rgba(0, 0, 0, 0.25),
     0 0 12px var(--palette-accent-strong),
     0 0 24px color-mix(in srgb, var(--palette-accent-strong) 60%, transparent),
     inset 0 2px 6px rgba(0, 0, 0, 0.2),
@@ -461,8 +469,8 @@ body {
 
 .timer-root .controls .btn-hifi.is-pressed:hover {
   box-shadow:
-    0 2px 0 rgba(0, 0, 0, 0.4),
-    0 3px 8px rgba(0, 0, 0, 0.25),
+    1px 2px 0 rgba(0, 0, 0, 0.4),
+    2px 4px 8px rgba(0, 0, 0, 0.25),
     0 0 14px var(--palette-accent-strong),
     0 0 28px color-mix(in srgb, var(--palette-accent-strong) 50%, transparent),
     inset 0 2px 6px rgba(0, 0, 0, 0.2),
@@ -727,7 +735,7 @@ body {
   transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
 }
 
-/* Vintage hi-fi tactile buttons: circular, domed, dark ring, muted centre (label outside) */
+/* Vintage hi-fi tactile buttons: glossy 3D domed surface + metallic bezel (label outside) */
 .btn-hifi {
   width: 1.5rem;
   height: 1.5rem;
@@ -737,52 +745,48 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 0;
-  /* Dark outer ring (bezel) */
-  border: 2px solid #1a1510;
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.25),
-    inset 2px 2px 5px rgba(255, 255, 255, 0.35),
-    inset -1px -1px 4px rgba(0, 0, 0, 0.2);
+  /* Metallic bezel: thin outer ring with light-to-dark gradient */
+  border: 2px solid transparent;
+  background-clip: border-box, padding-box;
+  background-origin: border-box, padding-box;
+  background-size: 100% 100%, 100% 100%;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .btn-hifi:hover {
   transform: translateY(-1px);
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.3),
-    inset 2px 2px 5px rgba(255, 255, 255, 0.4),
-    inset -1px -1px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .btn-hifi:active {
   transform: translateY(0);
-  box-shadow:
-    0 1px 4px rgba(0, 0, 0, 0.3),
-    inset 1px 1px 5px rgba(0, 0, 0, 0.15),
-    inset -1px -1px 3px rgba(255, 255, 255, 0.1);
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
-/* Both buttons: same soft muted warm centre (old amplifier knob) */
+/* Button surface: convex look (linear base + top-left highlight) + metallic bezel */
 .btn-hifi-primary,
 .btn-hifi-secondary {
-  background: radial-gradient(
-    circle at 35% 35%,
-    var(--color-btn-hifi-light),
-    var(--color-btn-hifi-mid) 45%,
-    var(--color-btn-hifi-dark) 100%
-  );
+  background:
+    linear-gradient(145deg, #e0e0e0 0%, #a0a0a0 25%, #505050 55%, #181818 100%) border-box,
+    linear-gradient(120deg, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.08) 22%, transparent 42%) padding-box,
+    linear-gradient(145deg, #0c0c0c 0%, #1e1e1e 35%, #3a3a3a 70%, #5a5a5a 100%) padding-box;
+  background-clip: border-box, padding-box, padding-box;
+  background-origin: border-box, padding-box, padding-box;
+  background-size: 100% 100%, 100% 100%, 100% 100%;
   color: var(--color-btn-hifi-text);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .btn-hifi-primary:hover,
 .btn-hifi-secondary:hover {
-  background: radial-gradient(
-    circle at 35% 35%,
-    var(--color-btn-hifi-light-hover),
-    var(--color-btn-hifi-mid-hover) 45%,
-    var(--color-btn-hifi-dark-hover) 100%
-  );
+  background:
+    linear-gradient(145deg, #ececec 0%, #b0b0b0 25%, #585858 55%, #1f1f1f 100%) border-box,
+    linear-gradient(120deg, rgba(255,255,255,0.36) 0%, rgba(255,255,255,0.1) 22%, transparent 42%) padding-box,
+    linear-gradient(145deg, #111111 0%, #252525 35%, #424242 70%, #646464 100%) padding-box;
+  background-clip: border-box, padding-box, padding-box;
+  background-origin: border-box, padding-box, padding-box;
+  background-size: 100% 100%, 100% 100%, 100% 100%;
 }
 
 .btn-primary {
@@ -1003,8 +1007,8 @@ body {
   }
 
   .braun-speaker {
-    width: var(--size-clock-speaker);
-    height: var(--size-clock-speaker);
+    width: calc(var(--size-clock-speaker) * 1.1);
+    height: calc(var(--size-clock-speaker) * 1.1);
   }
 
   .radio-dial {
