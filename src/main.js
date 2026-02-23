@@ -314,9 +314,6 @@ function createUI() {
       resetBtn.classList.remove("is-pressed");
       resetBtn.setAttribute("aria-pressed", "false");
     }, 200);
-    // #region agent log
-    fetch('http://127.0.0.1:7835/ingest/ec33f536-3ff5-425b-bfcd-81aa775622ef',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'45769b'},body:JSON.stringify({sessionId:'45769b',location:'main.js:resetBtn.click',message:'Reset clicked',data:{momentaryPress:true,releaseAfter400ms:true},timestamp:Date.now(),hypothesisId:'H1',runId:'post-fix'})}).catch(()=>{});
-    // #endregion
   });
 
   controls.append(startWrap, resetWrap);
