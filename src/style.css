@@ -168,6 +168,25 @@ body {
   overflow: hidden;
 }
 
+/* Footnote at bottom center */
+.app-footnote {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 0.5rem 1rem 0.75rem;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}
+
+.app-footnote a {
+  color: var(--color-text-tertiary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.app-footnote a:hover {
+  color: var(--color-text-secondary);
+}
+
 /* Two-column layout: left = timer (centred), right = reserved */
 .layout-columns {
   display: flex;
