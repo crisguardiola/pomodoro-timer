@@ -191,18 +191,21 @@ body {
 }
 
 /* Two-column layout: left = timer (centred), right = reserved.
-   Scale from bottom so bottom-aligned controls stay on screen (content height > viewport). */
+   Scale from bottom so bottom-aligned controls stay on screen (content height > viewport).
+   Constrain height so columns end at the bottom of the visible area. */
 .layout-columns {
   display: flex;
   flex: 1;
   width: 100%;
   min-height: 0;
+  max-height: 100%;
   overflow: hidden;
 }
 
 .column-left {
   flex: 1;
   min-height: 0;
+  max-height: 100%;
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -220,6 +223,7 @@ body {
   flex: 1;
   min-width: 0;
   min-height: 0;
+  max-height: 100%;
   display: flex;
   justify-content: center;
   align-items: stretch;
