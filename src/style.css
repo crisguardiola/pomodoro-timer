@@ -2,6 +2,23 @@
    Pomodoro Timer — Stage 1: Layout and work/break theme
    ============================================================================= */
 
+/* --- Custom font (self-hosted) ----------------------------------------------- */
+@font-face {
+  font-family: "Alte Haas Grotesk";
+  src: url("/fonts/AlteHaasGroteskRegular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alte Haas Grotesk";
+  src: url("/fonts/AlteHaasGroteskBold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* --- Design tokens (custom properties) -------------------------------------- */
 :root {
   /* Base palette — work theme (warm). Change these to retheme the app. */
@@ -54,7 +71,7 @@
   --shadow-toast: 0 4px 20px var(--palette-shadow);
 
   /* Typography */
-  --font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-family: "Alte Haas Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-size-xs: 0.8rem;
   --font-size-sm: 0.85rem;
   --font-size-base: 0.9rem;
@@ -693,6 +710,11 @@ body {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text);
+}
+
+/* Start / Reset labels in main controls */
+.timer-root .controls .control-btn-label {
+  text-transform: uppercase;
 }
 
 .btn {
